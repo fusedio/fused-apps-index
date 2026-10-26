@@ -1,5 +1,14 @@
 [
   {
+    "commit": "fe5a0d72e07b3af17d71a35cdd1ebfdf0ffe04ea",
+    "at": "2026-10-26T12:43:20Z",
+    "whats_new": "Claude: <pane-shot> The user attached a picture to this message, del….",
+    "new_powers": [],
+    "credits": [],
+    "pr": 4,
+    "first": false
+  },
+  {
     "commit": "4c260036ce79ccae8b7e377f8acd730595306ee6",
     "at": "2026-10-26T12:29:52Z",
     "whats_new": "Merge pull request #16 from iamsdas/fused-sine-starter-20261026-1047-1728; Claude: make it red; Claude: <pane-shot> The user attached a picture to this message, del….",
