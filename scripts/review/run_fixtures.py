@@ -25,6 +25,9 @@ reader and the diff, and — when FUSED_RENDER_SRC points at a fused-render
 checkout — that rules.py is a verbatim copy of
 fused_render/contrib/review_rules.py.
 
+Every fixture runs with a dummy ANTHROPIC_API_KEY (so step 6 runs against
+the canned replies) unless its `env` sets the key to "" (the no-key path).
+
 Run: python3 -I scripts/review/run_fixtures.py   (no network, no secrets)
 """
 
@@ -148,8 +151,11 @@ def run_fixture(name: str) -> tuple:
         spec = json.load(fh)
     with open(os.path.join(d, "expect.json"), encoding="utf-8") as fh:
         expect = json.load(fh)
-    saved = {k: os.environ.get(k) for k in (spec.get("env") or {})}
-    os.environ.update(spec.get("env") or {})
+    # Claude's review runs (against the canned replies) unless a fixture
+    # sets ANTHROPIC_API_KEY to "" to test the no-key path.
+    env = dict({"ANTHROPIC_API_KEY": "fixture-dummy-key"}, **(spec.get("env") or {}))
+    saved = {k: os.environ.get(k) for k in env}
+    os.environ.update(env)
     try:
         src = FixtureSource(name, spec)
         result = check.run_steps(src, check.Index(ROOT, base_rows(name)))
@@ -204,6 +210,21 @@ def self_checks() -> list:
         bad.append("block: '-->' inside the JSON")
     if "@someone" in body.split("\n", 1)[1]:
         bad.append("human text keeps a live @mention")
+    # The no-key block names the skip; the human text says so.
+    off = dict(hostile, status="pass", step=None, reasons=[], claude="skipped",
+               whats_new="Adds a dark theme.")
+    body = check.render_comment(off)
+    if (check.parse_block(body) or {}).get("claude") != "skipped" or \
+            check.CLAUDE_OFF not in body:
+        bad.append("no-key comment lacks the skip marker")
+    for title, text, want in [
+            ("Update Notes", "## What changed\nAdds a dark theme.\n\nMore.", "Adds a dark theme."),
+            ("Update Notes", "What changed: Faster saving.", "Faster saving."),
+            ("Update Notes", "Counts words now.\nSecond line.", "Counts words now."),
+            ("List Notes", "", "List Notes")]:
+        got = check.fallback_whats_new({"title": title, "body": text})
+        if got != want:
+            bad.append(f"fallback_whats_new({text!r}) = {got!r}, want {want!r}")
     # A comment a person wrote is never the review.
     if check.parse_block("no block") is not None:
         bad.append("parse_block invents a block")

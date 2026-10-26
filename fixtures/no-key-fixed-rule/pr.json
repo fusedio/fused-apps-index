@@ -1,0 +1,14 @@
+{
+  "author": "alice",
+  "files": [
+    {
+      "filename": "apps/no-key-bad.json",
+      "status": "added"
+    }
+  ],
+  "title": "List no-key-fixed-rule",
+  "body": "",
+  "env": {
+    "ANTHROPIC_API_KEY": ""
+  }
+}

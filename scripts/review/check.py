@@ -14,7 +14,11 @@ one-line plain reason; an error anywhere is a fail too (M3).
     5 Fixed rules   `rules.hard_hits` over the app at commit (+ the listing
               text): any hit fails, nothing overrules it
     6 Claude's review   whole app (first listing) or the diff from the
-              previous approved commit (update)
+              previous approved commit (update). SKIPPED (not failed) while
+              ANTHROPIC_API_KEY is unset or empty: the block then carries
+              `"claude": "skipped"`, What's new comes from the request's own
+              text, and new powers from `rules.powers` alone. With a key, an
+              API error, timeout or invalid answer still fails (M3).
     7 New powers  `rules.powers` ∪ the model's list: non-empty passes the
               check but waits for `fused: confirm <sha>` (no auto-merge)
     8 Result  ONE comment with the `<!-- fused-review {...} -->` block,
@@ -61,6 +65,7 @@ ASSET_RE = re.compile(r"^(?!/)(?!.*(?:^|/)\.\.(?:/|$))[^\\\0\n]{1,200}"
 BLOCK_RE = re.compile(r"<!-- fused-review (\{.*?\}) -->", re.S)
 LABELS = ("review-passed", "needs-confirmation", "review-failed")
 MAINTAINER_ROLES = {"admin", "maintain"}
+CLAUDE_OFF = "Claude's review is off (no key set); only the fixed rules ran."
 CRASH_REASON = ("The review ran into a problem and could not finish. It runs again "
                 "when the listing is updated.")
 
@@ -261,12 +266,20 @@ def _steps(src, index: Index, pr: dict) -> dict:
         except fetch_app.FetchError as e:
             raise Fail(6, f"The last approved version could not be read: {e}") from None
         diff = fetch_app.diff_trees(prev, tree)
-    answer, why = src.review(row=row, pr=pr, tree=None if diff is not None else tree,
-                             diff=diff)
-    if answer is None:
-        raise Fail(6, why)
-    if answer["verdict"] != "pass":
-        raise Fail(6, answer["reasons"], answer["whats_new"])
+    claude = None
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        # The owner runs without a key for now: every other step still
+        # holds; this one is skipped and says so on the request.
+        claude = "skipped"
+        answer = {"verdict": "pass", "reasons": [], "new_powers": [],
+                  "whats_new": fallback_whats_new(pr)}
+    else:
+        answer, why = src.review(row=row, pr=pr, tree=None if diff is not None else tree,
+                                 diff=diff)
+        if answer is None:
+            raise Fail(6, why)
+        if answer["verdict"] != "pass":
+            raise Fail(6, answer["reasons"], answer["whats_new"])
 
     # 7. New powers
     found = rules.powers(diff if diff is not None else tree) + answer["new_powers"]
@@ -276,9 +289,44 @@ def _steps(src, index: Index, pr: dict) -> dict:
         if key not in seen:
             seen.add(key)
             powers.append({"kind": p["kind"], "detail": p["detail"]})
-    return {"slug": slug, "kind": "update" if diff is not None else "list",
-            "whats_new": answer["whats_new"], "new_powers": powers[:16],
-            "status": "needs-confirmation" if powers else "pass"}
+    out = {"slug": slug, "kind": "update" if diff is not None else "list",
+           "whats_new": answer["whats_new"], "new_powers": powers[:16],
+           "status": "needs-confirmation" if powers else "pass"}
+    if claude:
+        out["claude"] = claude
+    return out
+
+
+_WHAT_CHANGED = re.compile(r"^\s*(?:#+\s*|\*\*)?what\s+changed\b\W*", re.I)
+
+
+def fallback_whats_new(pr: dict) -> str:
+    """What's new without Claude: the request body's "What changed" text
+    when it has that heading, else the body's first line, else the title."""
+    lines = [ln.strip() for ln in str(pr.get("body") or "").splitlines()]
+    text = ""
+    for i, ln in enumerate(lines):
+        m = _WHAT_CHANGED.match(ln)
+        if m:
+            rest = ln[m.end():].strip(" *:")
+            para = [rest] if rest else []
+            for nxt in lines[i + 1:]:
+                if not nxt:
+                    if para:
+                        break
+                    continue
+                if nxt.startswith("#"):
+                    break
+                para.append(nxt)
+            text = " ".join(para)
+            break
+    if not text:
+        text = next((ln for ln in lines if ln and not ln.startswith("<!--")), "")
+    if not text:
+        text = str(pr.get("title") or "")
+    text = re.sub(r"^\s*(?:[#>]+|[-*+]|\d+[.)])\s+", "", text)
+    text = re.sub(r"\*\*|__|`", "", " ".join(text.split()))
+    return text[:700]
 
 
 def _who(src, author: str, repo: str) -> None:
@@ -358,6 +406,8 @@ def block_json(result: dict) -> str:
     block = {"sha": result["sha"], "status": result["status"],
              "reasons": result["reasons"], "whats_new": result["whats_new"],
              "new_powers": result["new_powers"]}
+    if result.get("claude"):
+        block["claude"] = result["claude"]
     text = json.dumps(block, ensure_ascii=False, separators=(", ", ": "))
     return text.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
 
@@ -408,6 +458,8 @@ def render_comment(result: dict, *, confirmed_by: str | None = None) -> str:
         if confirmed_by:
             lines.append(f"The author ({_md(confirmed_by)}) confirmed the new powers.")
         lines.append("This listing merges on its own once the checks finish.")
+    if result.get("claude") == "skipped" and st != "fail":
+        lines += ["", CLAUDE_OFF]
     if result.get("whats_new") and st != "fail":
         lines += ["", f"**What's new:** {_md(result['whats_new'])}"]
     return "\n".join(lines) + "\n"

@@ -1,0 +1,18 @@
+{
+  "author": "vasu2001",
+  "files": [
+    {
+      "filename": "apps/sine-starter.json",
+      "status": "modified"
+    }
+  ],
+  "title": "Update Sine Starter",
+  "body": "Shows today's temperature next to the plot.",
+  "trees": {
+    "4e1b59da4159f518365d0f436f32306b13c9f606": "app_prev",
+    "16f63d00a6898c08d2f50b59616c3b185b79eb21": "app"
+  },
+  "env": {
+    "ANTHROPIC_API_KEY": ""
+  }
+}

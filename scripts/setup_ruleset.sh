@@ -14,7 +14,8 @@
 #    the ruleset source or owner organization"), so the reviews-sync job does
 #    not write main: it pushes review entries to the `reviews` branch, which
 #    this ruleset does not cover (~DEFAULT_BRANCH only).
-# 4. Reminder: the ANTHROPIC_API_KEY secret.
+# 4. Reminder: the ANTHROPIC_API_KEY secret (optional for now; without it
+#    Claude's review is skipped and only the fixed rules run).
 set -euo pipefail
 
 REPO="${1:-vasu2001/fused-apps-index}"
@@ -70,9 +71,10 @@ fi
 
 cat <<EOF
 
-Done. One thing left, which this script can't do for you:
+Done. When you want Claude's review on, set the key (this script can't):
 
   gh secret set ANTHROPIC_API_KEY --repo $REPO
 
-(paste the key when asked). Until it is set every review fails at step 6.
+Until then the check skips Claude's review (it says so on each request) and
+runs every other step; clean listings still merge.
 EOF

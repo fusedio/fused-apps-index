@@ -1,0 +1,19 @@
+{
+  "author": "alice",
+  "files": [
+    {
+      "filename": "apps/plain-notes.json",
+      "status": "added"
+    }
+  ],
+  "title": "List Plain Notes",
+  "body": "## What changed\nA note box that counts your words.\n\n## Details\nx",
+  "env": {
+    "ANTHROPIC_API_KEY": ""
+  },
+  "model": [
+    {
+      "text": "must not be asked"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "no-key-bad",
+  "repo": "alice/no-key-bad",
+  "branch": "main",
+  "commit": "717f5e0af33a46f338b989e7d2ded84c356d170b",
+  "name": "No Key Bad",
+  "description": "The no-key-bad app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}

@@ -1,0 +1,8 @@
+{
+  "status": "needs-confirmation",
+  "kind": "update",
+  "power_kinds": [
+    "dependencies",
+    "network"
+  ]
+}

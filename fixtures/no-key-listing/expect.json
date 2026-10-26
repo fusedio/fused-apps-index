@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "kind": "list",
+  "block": {
+    "status": "pass",
+    "reasons": [],
+    "claude": "skipped",
+    "whats_new": "A note box that counts your words.",
+    "new_powers": []
+  }
+}

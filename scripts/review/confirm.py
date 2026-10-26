@@ -73,6 +73,8 @@ def main() -> int:
     result = {"sha": sha, "status": "pass", "reasons": [],
               "whats_new": block.get("whats_new") or "",
               "new_powers": block.get("new_powers") or [], "kind": "confirmed"}
+    if block.get("claude"):
+        result["claude"] = block["claude"]
     gh.edit_comment(repo, bot["id"], check.render_comment(
         result, confirmed_by=pr["user"]["login"]))
     check.set_label(gh, repo, number, "review-passed")

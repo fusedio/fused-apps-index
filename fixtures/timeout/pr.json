@@ -9,6 +9,7 @@
   "title": "List timeout",
   "body": "",
   "env": {
-    "REVIEW_FORCE_TIMEOUT": "1"
+    "REVIEW_FORCE_TIMEOUT": "1",
+    "ANTHROPIC_API_KEY": "dummy-key"
   }
 }
