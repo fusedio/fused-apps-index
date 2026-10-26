@@ -2,16 +2,17 @@
 
 A release whose review found new powers passes the check but waits. The
 PR author confirms by commenting exactly `fused: confirm <head sha>` (fused
-posts it for them). This job enables auto-merge only when ALL hold:
+posts it for them). This job accepts the confirmation only when ALL hold:
 
 - the comment is on an open pull request, by that pull request's author;
 - `<sha>` is the pull request's current head;
 - the bot's own fused-review comment (never one a person wrote) is for
   that head and says `needs-confirmation`.
 
-Then it turns the block's status to `pass` (fused shows Live once merged),
-labels the PR `review-passed`, and enables auto-merge pinned to that head
-(`--match-head-commit`), so a later push cannot ride the confirmation.
+Then it turns the block's status to `pass` (fused shows Live once merged)
+and labels the PR `review-passed`. It never merges: a maintainer merges by
+hand (owner, 2026-10-26). A later push re-runs the check, whose fresh block
+says `needs-confirmation` again, so a confirmation cannot be ridden.
 Anything else: no action, with the reason in the job log.
 """
 
@@ -82,10 +83,7 @@ def main() -> int:
         gh.react(repo, event["comment"]["id"], "+1")
     except Exception as e:  # noqa: BLE001 — a reaction is decoration
         print(f"reaction failed: {e}", file=sys.stderr)
-    if not check.enable_auto_merge(repo, number, sha):
-        print("auto-merge could not be enabled", file=sys.stderr)
-        return 1
-    print(f"confirmed {sha}; auto-merge enabled")
+    print(f"confirmed {sha}; a maintainer merges it")
     return 0
 
 

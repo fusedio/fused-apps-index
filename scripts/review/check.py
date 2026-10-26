@@ -20,16 +20,19 @@ one-line plain reason; an error anywhere is a fail too (M3).
               text, and new powers from `rules.powers` alone. With a key, an
               API error, timeout or invalid answer still fails (M3).
     7 New powers  `rules.powers` ∪ the model's list: non-empty passes the
-              check but waits for `fused: confirm <sha>` (no auto-merge)
+              check but waits for `fused: confirm <sha>` (the status stays
+              success; the label says what is waited for)
     8 Result  ONE comment with the `<!-- fused-review {...} -->` block,
               labels, the `review` commit status on the PR head (pending
-              while running; success on pass/needs-confirmation; failure),
-              and `gh pr merge --squash --auto` on a clean pass
+              while running; success on pass/needs-confirmation; failure).
+              NOTHING MERGES ON ITS OWN: a maintainer merges every pull
+              request by hand once the check is green (owner, 2026-10-26;
+              the earlier `gh pr merge --auto` on a clean pass is gone).
 
 Pull requests that change anything but one row (block list, collections,
 categories, the check itself) are maintainer changes: from an index admin
-or maintainer they pass with "a person reviews and merges this" and never
-auto-merge; from anyone else they fail step 1.
+or maintainer they pass with "a person reviews and merges this"; from
+anyone else they fail step 1.
 
 Usage (the workflow): `python scripts/review/check.py` with GITHUB_EVENT_PATH,
 GITHUB_REPOSITORY, GITHUB_TOKEN, GH_TOKEN and ANTHROPIC_API_KEY set.
@@ -444,8 +447,7 @@ def render_comment(result: dict, *, confirmed_by: str | None = None) -> str:
                      "runs again on every update.")
     elif result.get("kind") == "maintainer":
         lines.append("### Maintainer change")
-        lines.append("This changes the index itself. A person reviews and merges it; "
-                     "it never merges on its own.")
+        lines.append("This changes the index itself. A maintainer reviews and merges it.")
     elif st == "needs-confirmation":
         lines.append("### Review passed: waiting for the author to confirm")
         lines.append("This release lets the app do new things:")
@@ -457,7 +459,7 @@ def render_comment(result: dict, *, confirmed_by: str | None = None) -> str:
         lines.append("### Review passed")
         if confirmed_by:
             lines.append(f"The author ({_md(confirmed_by)}) confirmed the new powers.")
-        lines.append("This listing merges on its own once the checks finish.")
+        lines.append("A Fused maintainer merges it; the app is listed once that lands.")
     if result.get("claude") == "skipped" and st != "fail":
         lines += ["", CLAUDE_OFF]
     if result.get("whats_new") and st != "fail":
@@ -488,28 +490,6 @@ def set_label(gh: GitHub, repo: str, number: int, label: str | None) -> None:
             gh.remove_label(repo, number, name)
     if label:
         gh.add_labels(repo, number, [label])
-
-
-def gh_cli(*args: str) -> bool:
-    """`gh …` for the auto-merge switch (GraphQL under the hood). True on
-    success; output goes to the job log."""
-    try:
-        r = subprocess.run(["gh", *args], capture_output=True, text=True, timeout=60)
-    except (OSError, subprocess.TimeoutExpired) as e:
-        print(f"gh {' '.join(args)}: {e}", file=sys.stderr)
-        return False
-    if r.returncode != 0:
-        print(f"gh {' '.join(args)}: {r.stderr.strip()[-500:]}", file=sys.stderr)
-    return r.returncode == 0
-
-
-def enable_auto_merge(repo: str, number: int, sha: str) -> bool:
-    return gh_cli("pr", "merge", str(number), "--repo", repo, "--squash", "--auto",
-                  "--match-head-commit", sha)
-
-
-def disable_auto_merge(repo: str, number: int) -> None:
-    gh_cli("pr", "merge", str(number), "--repo", repo, "--disable-auto")
 
 
 STATUS_TEXT = {"pass": "Review passed", "needs-confirmation":
@@ -544,8 +524,6 @@ def main() -> int:
     number = src.pr["number"]
     root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     head = src.pr["head_sha"]
-    # A new push must never ride an earlier pass's auto-merge.
-    disable_auto_merge(repo, number)
     status_for(gh, repo, head, "pending", "Fused is reviewing this listing")
     try:
         result = run_steps(src, Index(root))
@@ -565,9 +543,7 @@ def main() -> int:
         return 1
     status_for(gh, repo, head, "failure" if result["status"] == "fail" else "success",
                STATUS_TEXT[result["status"]])
-    if result["status"] == "pass" and result.get("kind") != "maintainer":
-        if not enable_auto_merge(repo, number, result["sha"]):
-            print("auto-merge could not be enabled; a maintainer can merge", file=sys.stderr)
+    # No merge here: a maintainer merges by hand once the status is green.
     return 1 if result["status"] == "fail" else 0
 
 

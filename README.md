@@ -38,8 +38,8 @@ it. Every such pull request runs the `review` check:
    run in the background, give Claude tools), the check passes but waits for
    the author to confirm in fused (it comments `fused: confirm <sha>`).
 8. **Result.** One comment on the pull request, with a machine-readable
-   `<!-- fused-review {...} -->` block fused reads. A clean pass merges on
-   its own.
+   `<!-- fused-review {...} -->` block fused reads. Nothing merges on its
+   own: a Fused maintainer merges the pull request once the check is green.
 
 Then, every 10 minutes, a job writes the release's plain-language "What's
 new" into `reviews/<slug>.json` on the **`reviews` branch**. `main` is fully
@@ -85,10 +85,10 @@ A block-list entry: `{"slug", "commit", "level": "hard" | "soft", "reason",
   no secrets). With `FUSED_RENDER_SRC=<fused-render checkout>` it also checks
   that `scripts/review/rules.py` is a verbatim copy of
   `fused_render/contrib/review_rules.py`. Change the rules there, then copy.
-- One-time setup: `scripts/setup_ruleset.sh` (ruleset, auto-merge, labels),
-  then, when the owner is ready to turn Claude's review on,
+- One-time setup: `scripts/setup_ruleset.sh` (ruleset, labels), then, when
+  the owner is ready to turn Claude's review on,
   `gh secret set ANTHROPIC_API_KEY`. Without it every non-AI step still runs
-  and clean listings still merge. The required check `review` is a commit
+  and a clean listing is ready for a maintainer to merge. The required check `review` is a commit
   status the check sets on the pull request's head.
 - The check never runs code from a pull request or from an app: both are
   read as data. Keep it that way.

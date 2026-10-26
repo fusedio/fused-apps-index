@@ -1,8 +1,9 @@
 """The `reviews-sync` job (§18.2 step 9): review entries after merges.
 
-Merges done by auto-merge are made with GITHUB_TOKEN, and events caused by
-GITHUB_TOKEN start no workflow, so nothing fires on merge. This job runs on
-a schedule (every 10 minutes) and on demand. It scans merged pull requests
+Nothing fires on merge that this job can trust (a `pull_request: closed`
+run of a hand merge is possible, but a merge made with GITHUB_TOKEN starts
+no workflow), so this job runs on a schedule (every 10 minutes) and on
+demand. It scans merged pull requests
 since the newest review entry (minus a 2-day overlap), oldest first; for
 each one that changed exactly one `apps/<slug>.json` (not a delete) it
 reads the row as the merge left it, and when `reviews/<slug>.json` has no

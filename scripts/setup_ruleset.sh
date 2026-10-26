@@ -3,8 +3,9 @@
 #
 #   scripts/setup_ruleset.sh [owner/name]     (default vasu2001/fused-apps-index)
 #
-# 1. Repo settings: squash merges only, auto-merge allowed, branches deleted
-#    after merge.
+# 1. Repo settings: squash merges only, no auto-merge (a maintainer merges
+#    every pull request by hand; owner, 2026-10-26), branches deleted after
+#    merge.
 # 2. The review labels.
 # 3. The `main` ruleset: pull request required, required status check
 #    `review` (the commit status check.py sets on the PR head, from GitHub
@@ -22,7 +23,7 @@ REPO="${1:-vasu2001/fused-apps-index}"
 
 echo "== repo settings ($REPO)"
 gh api -X PATCH "repos/$REPO" \
-  -F allow_auto_merge=true \
+  -F allow_auto_merge=false \
   -F allow_squash_merge=true \
   -F allow_merge_commit=false \
   -F allow_rebase_merge=false \

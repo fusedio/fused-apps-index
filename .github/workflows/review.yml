@@ -35,8 +35,8 @@ jobs:
       group: review-${{ github.event.pull_request.number }}
       cancel-in-progress: true
     permissions:
-      contents: write        # enabling auto-merge needs merge rights
-      pull-requests: write   # the comment, labels, auto-merge
+      contents: read
+      pull-requests: write   # the comment, labels
       issues: write          # labels live on the issue side
       statuses: write        # the `review` status on the PR head (required check)
     steps:

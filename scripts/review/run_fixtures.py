@@ -14,7 +14,9 @@ A fixture is `fixtures/<name>/`:
                   "trees"?: {"<commit>": "<dir>"}, "model"?: [reply, …],
                   "env"?: {…}}
     apps/…       the PR's version of the row file (what `head_text` reads)
-    base/apps/…  extra rows the base index has (besides the real apps/)
+    base/apps/…  rows the base index has, OVER the real apps/ (an update
+                 fixture pins its previous row here, so a listing
+                 moving on main cannot change what the fixture diffs)
     app/         the app at the row's commit (other trees via "trees")
     expect.json  {"step": n, "reason_contains": "…"} for a fail, or
                  {"status": "pass" | "needs-confirmation", "kind"?,
@@ -126,7 +128,13 @@ class FixtureSource:
         return self.compare.get(f"{repo}@{head}", "behind")
 
     def app_tree(self, repo, sha):
-        sub = (self.spec.get("trees") or {}).get(sha, "app")
+        trees = self.spec.get("trees") or {}
+        if trees and sha not in trees:
+            # A fixture that names its trees must name every sha the steps
+            # ask for; silently handing back `app/` once made an update
+            # fixture diff a tree against itself when the live row moved.
+            raise fetch_app.FetchError(f"fixture names no tree for {sha[:7]}")
+        sub = trees.get(sha, "app")
         path = os.path.join(self.dir, sub)
         if not os.path.isdir(path):
             raise fetch_app.FetchError("The app's files could not be downloaded.")
