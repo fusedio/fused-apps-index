@@ -1,5 +1,16 @@
 [
   {
+    "commit": "4c260036ce79ccae8b7e377f8acd730595306ee6",
+    "at": "2026-10-26T12:29:52Z",
+    "whats_new": "Merge pull request #16 from iamsdas/fused-sine-starter-20261026-1047-1728; Claude: make it red; Claude: <pane-shot> The user attached a picture to this message, del….",
+    "new_powers": [],
+    "credits": [
+      "iamsdas"
+    ],
+    "pr": 2,
+    "first": false
+  },
+  {
     "commit": "4e1b59da4159f518365d0f436f32306b13c9f606",
     "at": "2026-10-26T15:45:00Z",
     "whats_new": "First reviewed release.",
