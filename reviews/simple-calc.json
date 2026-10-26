@@ -1,0 +1,13 @@
+[
+  {
+    "commit": "86ea1bd2382389bef5c7ddbda8749c0379660622",
+    "at": "2026-10-26T15:41:08Z",
+    "whats_new": "First release: calc app.",
+    "new_powers": [
+      "Changes the tools Claude can use in this app"
+    ],
+    "credits": [],
+    "pr": 5,
+    "first": true
+  }
+]
