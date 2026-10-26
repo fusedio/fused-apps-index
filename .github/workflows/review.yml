@@ -89,9 +89,11 @@ jobs:
       group: reviews-sync
       cancel-in-progress: false
     permissions:
-      contents: write        # the bot commit to reviews/ (ruleset bypass)
+      contents: write        # pushes the `reviews` branch (main's ruleset has no bypass)
       pull-requests: read
     steps:
+      # Scripts come from main; entries go to the `reviews` branch through a
+      # worktree reviews_sync.py makes (it starts the branch if it is absent).
       - uses: actions/checkout@v4
         with:
           ref: main
@@ -106,6 +108,7 @@ jobs:
           python -I scripts/review/reviews_sync.py
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          REVIEWS_DIR: ${{ runner.temp }}/reviews-branch
 
   fixtures:
     if: github.event_name == 'push'

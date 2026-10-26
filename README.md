@@ -37,14 +37,18 @@ it. Every such pull request runs the `review` check:
    its own.
 
 Then, every 10 minutes, a job writes the release's plain-language "What's
-new" into `reviews/<slug>.json`.
+new" into `reviews/<slug>.json` on the **`reviews` branch**. `main` is fully
+protected (no bypass, admins included), so the bot never writes it; the
+`reviews/` folder on `main` holds hand-written entries and is the fallback
+for a slug the branch doesn't have yet. Readers take the branch first.
 
 ## Files
 
 | Path | What | Who changes it |
 |---|---|---|
 | `apps/<slug>.json` | One listed app (the row) | Authors, through fused, via the review check |
-| `reviews/<slug>.json` | Each approved release's What's new, newest first | The review bot only, after a merge |
+| `reviews/<slug>.json` on the `reviews` branch | Each approved release's What's new, newest first | The review bot only, after a merge (plain push; the branch holds only `reviews/`) |
+| `reviews/<slug>.json` on `main` | Hand entries (the fallback) | Fused maintainers |
 | `blocklist.json` | Releases pulled after approval (`hard` stops the app, `soft` pauses updates) | Fused maintainers, human-reviewed PRs |
 | `collections.json` | Featured apps and shelves | Fused maintainers |
 | `categories.json` | The Marketplace's categories | Fused maintainers |
@@ -77,6 +81,7 @@ A block-list entry: `{"slug", "commit", "level": "hard" | "soft", "reason",
   that `scripts/review/rules.py` is a verbatim copy of
   `fused_render/contrib/review_rules.py`. Change the rules there, then copy.
 - One-time setup: `scripts/setup_ruleset.sh` (ruleset, auto-merge, labels),
-  then `gh secret set ANTHROPIC_API_KEY`.
+  then `gh secret set ANTHROPIC_API_KEY`. The required check `review` is a
+  commit status the check sets on the pull request's head.
 - The check never runs code from a pull request or from an app: both are
   read as data. Keep it that way.

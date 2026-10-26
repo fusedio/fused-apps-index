@@ -7,9 +7,13 @@
 #    after merge.
 # 2. The review labels.
 # 3. The `main` ruleset: pull request required, required status check
-#    `review` (from GitHub Actions), no force pushes or deletion. Admins are
-#    bound by it (no admin bypass). The ONLY bypass actor is the GitHub
-#    Actions app, used by the reviews-sync job's bot commits to reviews/.
+#    `review` (the commit status check.py sets on the PR head, from GitHub
+#    Actions), squash only, no force pushes or deletion. NO bypass actors,
+#    admins included. GitHub refuses the GitHub Actions app as a bypass actor
+#    on a user-owned repo ("Actor GitHub Actions integration must be part of
+#    the ruleset source or owner organization"), so the reviews-sync job does
+#    not write main: it pushes review entries to the `reviews` branch, which
+#    this ruleset does not cover (~DEFAULT_BRANCH only).
 # 4. Reminder: the ANTHROPIC_API_KEY secret.
 set -euo pipefail
 
@@ -38,9 +42,7 @@ BODY="$(cat <<JSON
   "target": "branch",
   "enforcement": "active",
   "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
-  "bypass_actors": [
-    {"actor_id": $APP_ID, "actor_type": "Integration", "bypass_mode": "always"}
-  ],
+  "bypass_actors": [],
   "rules": [
     {"type": "deletion"},
     {"type": "non_fast_forward"},
