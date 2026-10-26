@@ -2,7 +2,7 @@
   "slug": "sine-starter",
   "repo": "vasu2001/sine-starter",
   "branch": "main",
-  "commit": "4e1b59da4159f518365d0f436f32306b13c9f606",
+  "commit": "4c260036ce79ccae8b7e377f8acd730595306ee6",
   "name": "Sine Starter",
   "description": "The minimal fused-app: a slider, a Python main() that computes a sine wave, and a canvas plot. Copy it to start your own.",
   "category": "starters",
