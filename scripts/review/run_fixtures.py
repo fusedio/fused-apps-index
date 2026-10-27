@@ -51,6 +51,7 @@ import claude_review  # noqa: E402
 import confirm  # noqa: E402
 import fetch_app  # noqa: E402
 import reviews_sync  # noqa: E402
+import rules  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 FIXTURES = os.path.join(ROOT, "fixtures")
@@ -296,6 +297,19 @@ def self_checks() -> list:
             bad.append(f"tarball accepted {evil!r}")
         except fetch_app.FetchError:
             pass
+
+    # Binary entries carry their evidence: a real picture passes, a "picture"
+    # that is a zip (or has one appended) fails, and a signature split
+    # across two streamed chunks is still found.
+    png = b"\x89PNG\r\n\x1a\n" + b"\0" * 40
+    for name, data, want in [("ok.png", png, False), ("zip.png", b"PK\x03\x04" + b"\0" * 40, True),
+                             ("tail.png", png + b"PK\x05\x06\0\0", True)]:
+        hits = rules.hard_hits([fetch_app._entry(name, data, "100644")])
+        if bool(hits) is not want:
+            bad.append(f"binary evidence: {name} hits={hits}")
+    big = io.BytesIO(png + b"\0" * (1024 * 1024 - len(png) - 2) + b"PK\x03\x04" + b"\0" * 10)
+    if fetch_app._stream_sniff(big) != {"head": (png + b"\0" * 64)[:64], "zip": True}:
+        bad.append("stream sniff misses a zip signature split across chunks")
 
     # The diff: a changed line and a new file.
     d = fetch_app.diff_trees([{"path": "a.py", "text": "x = 1", "mode": "100644"}],

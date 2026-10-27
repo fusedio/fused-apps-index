@@ -7,6 +7,11 @@ kept as an entry with mode "120000" and no content so the fixed rules fail
 it plainly instead of it vanishing; any other member type, an absolute
 path, a `..`, a backslash, or a size past the caps is a `FetchError`.
 
+A binary file's entry also carries `rules.sniff` evidence (`head`, the
+first bytes, and `zip`, whether a zip signature sits anywhere in it): the
+fixed rules judge a picture by its bytes, and fail one that has none. A
+file past MAX_FILE_BYTES is streamed once for that evidence and not kept.
+
 `files_from_dir` reads a fixture's `app/` folder into the same shape, and
 `diff_trees` turns two trees into a git-style unified diff, which is what
 Claude's review reads for an update and what `rules.powers` scans.
@@ -21,8 +26,13 @@ import os
 import re
 import stat
 import tarfile
+import sys
 import urllib.error
 import urllib.request
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import rules  # noqa: E402
 
 CODELOAD = "https://codeload.github.com"
 TIMEOUT_S = 60
@@ -89,7 +99,8 @@ def read_tarball(raw: bytes) -> list:
                 mode = "100755" if m.mode & 0o111 else "100644"
                 if m.size > MAX_FILE_BYTES:
                     out.append({"path": path, "text": None, "mode": mode,
-                                "binary": True, "size": m.size})
+                                "binary": True, "size": m.size,
+                                **_stream_sniff(tar.extractfile(m))})
                     continue
                 fh = tar.extractfile(m)
                 data = fh.read() if fh is not None else b""
@@ -120,8 +131,30 @@ def _entry(path: str, data: bytes, mode: str) -> dict:
             text = data.decode("utf-8")
         except UnicodeDecodeError:
             text = None
-    return {"path": path, "text": text, "mode": mode, "binary": text is None,
-            "size": len(data), "sha": hashlib.sha256(data).hexdigest()}
+    out = {"path": path, "text": text, "mode": mode, "binary": text is None,
+           "size": len(data), "sha": hashlib.sha256(data).hexdigest()}
+    if text is None:
+        out.update(rules.sniff(data))
+    return out
+
+
+def _stream_sniff(fh) -> dict:
+    """`rules.sniff`'s evidence for a file too big to keep, read in chunks
+    (a signature split across two chunks is still found)."""
+    if fh is None:
+        return {}
+    head, tail, found = b"", b"", False
+    sigs = (b"PK\x03\x04", b"PK\x05\x06")
+    while True:
+        chunk = fh.read(1024 * 1024)
+        if not chunk:
+            break
+        if len(head) < 64:
+            head = (head + chunk)[:64]
+        window = tail + chunk
+        found = found or any(sg in window for sg in sigs)
+        tail = window[-3:]
+    return {"head": head, "zip": found}
 
 
 def files_from_dir(root: str) -> list:
