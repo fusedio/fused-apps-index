@@ -1,0 +1,14 @@
+{
+  "slug": "crosspoint-reader-d6b58067",
+  "repo": "vasu2001/crosspoint-reader",
+  "branch": "main",
+  "commit": "40465616590c2bc8725cbd15c3bf43557e6a3975",
+  "name": "CrossPoint Library",
+  "description": "download and transfer epubs directly to crosspoint compatible readers from epub libraries",
+  "category": "productivity",
+  "tags": [],
+  "icon": "icon.png",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.0.0"
+}
