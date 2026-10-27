@@ -1,0 +1,18 @@
+[
+  {
+    "commit": "7758518e52189558038a621082a38cbd8fce8bd9",
+    "at": "2026-10-27T13:57:33Z",
+    "whats_new": "First release: Grabs songs from YouTube, converts them to MP3 with cover art, and copies them onto your MP3 player.",
+    "new_powers": [
+      "Changes the tools Claude can use in this app",
+      "Installs packages: imageio-ffmpeg, yt-dlp",
+      "Sends or loads data from pypi.org",
+      "Sends or loads data from files.pythonhosted.org"
+    ],
+    "credits": [],
+    "pr": 19,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1435796331
+  }
+]
