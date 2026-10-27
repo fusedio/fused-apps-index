@@ -1,0 +1,16 @@
+{
+  "slug": "h3-foldable-403ed62c",
+  "repo": "amanbagrecha/h3-foldable",
+  "branch": "main",
+  "commit": "02da3265357bace7095d829f1c87c264eba61428",
+  "name": "H3 Foldable Globe",
+  "description": "print maps for foldable globe",
+  "category": "productivity",
+  "tags": [
+    "maps"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
