@@ -1,0 +1,17 @@
+{
+  "slug": "notetaker-meeting-sync-6ae67c5d",
+  "repo": "amanbagrecha/notetaker-meeting-sync",
+  "branch": "main",
+  "commit": "a22b5e564ef163310710714ae08cec8216904b5a",
+  "name": "Meeting Notebook",
+  "description": "Meeting notes app as notebook",
+  "category": "productivity",
+  "tags": [
+    "meeting",
+    "notebook"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
