@@ -1,0 +1,13 @@
+[
+  {
+    "commit": "3492957a3d1dedf931bad2ca4a8bd3ea14bf3e4f",
+    "at": "2026-10-27T08:50:07Z",
+    "whats_new": "First release: The minimal fused-app: a slider, a Python main() that computes a sine wave, and a canvas plot. Copy it to start your own.",
+    "new_powers": [],
+    "credits": [],
+    "pr": 11,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1420748515
+  }
+]
