@@ -50,6 +50,7 @@ import check  # noqa: E402
 import claude_review  # noqa: E402
 import confirm  # noqa: E402
 import fetch_app  # noqa: E402
+import reviews_sync  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 FIXTURES = os.path.join(ROOT, "fixtures")
@@ -120,9 +121,19 @@ class FixtureSource:
         return login.lower() in self.maintainers
 
     def repo_meta(self, repo):
+        # GitHub's answer for a repo that is where its name says, owned by
+        # the account before the slash; a fixture overrides any key (a
+        # moved repo answers another full_name), or names it null (gone).
+        meta = {"default_branch": "main", "private": False, "full_name": repo,
+                "owner": {"login": repo.split("/", 1)[0]}, "id": None}
         if repo in self.repos:
-            return self.repos[repo]
-        return {"default_branch": "main", "private": False}
+            if self.repos[repo] is None:
+                return None
+            meta.update(self.repos[repo])
+        return meta
+
+    def review_entries(self, slug):
+        return (self.spec.get("reviews") or {}).get(slug) or []
 
     def compare_status(self, repo, base, head):
         return self.compare.get(f"{repo}@{head}", "behind")
@@ -293,6 +304,32 @@ def self_checks() -> list:
     for want in ("-x = 1", "+x = 2", "new file mode 100644", "+++ b/b.py"):
         if want not in d:
             bad.append(f"diff lacks {want!r}")
+
+    # The index's OWN block list matches its schema. fixtures.yml runs this
+    # on every pull request with the request's own files, so a maintainer's
+    # broken blocklist.json is caught there too.
+    with open(os.path.join(ROOT, "blocklist.json"), encoding="utf-8") as fh:
+        for p in check.blocklist_problems(fh.read()):
+            bad.append(f"blocklist.json: {p}")
+
+    # New powers keep the required status pending until the confirm; only
+    # a confirmed (`pass`) block becomes a review entry.
+    if check.STATUS_STATE != {"pass": "success", "needs-confirmation": "pending",
+                              "fail": "failure"}:
+        bad.append(f"status map: {check.STATUS_STATE}")
+    head = "d" * 40
+    for block, want in [({"sha": head, "status": "pass"}, True),
+                        ({"sha": head, "status": "needs-confirmation"}, False),
+                        ({"sha": "e" * 40, "status": "pass"}, False),
+                        (None, False)]:
+        if reviews_sync.accepts(block, head) is not want:
+            bad.append(f"reviews_sync.accepts({block}) is not {want}")
+    entry = reviews_sync.entry_for(
+        row={"commit": head}, pr={"number": 7, "merged_at": "2026-10-27T00:00:00Z"},
+        block={"whats_new": "x", "new_powers": [], "claude": "skipped"}, previous=[],
+        credits=[], repo_id=42)
+    if entry.get("claude") != "skipped" or entry.get("repo_id") != 42:
+        bad.append(f"review entry lacks the claude marker or repo id: {entry}")
 
     # The model answer: strict.
     if claude_review.parse_answer("Sure! {\"verdict\": \"pass\"}") is not None:

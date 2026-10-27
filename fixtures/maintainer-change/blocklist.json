@@ -1,0 +1,12 @@
+{
+  "blocked": [
+    {
+      "slug": "sine-starter",
+      "commit": "4e1b59da4159f518365d0f436f32306b13c9f606",
+      "level": "soft",
+      "reason": "A test block.",
+      "what_to_do": "Nothing to do.",
+      "at": "2026-10-27T09:00:00Z"
+    }
+  ]
+}

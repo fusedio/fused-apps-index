@@ -9,8 +9,10 @@ posts it for them). This job accepts the confirmation only when ALL hold:
 - the bot's own fused-review comment (never one a person wrote) is for
   that head and says `needs-confirmation`.
 
-Then it turns the block's status to `pass` (fused shows Live once merged)
-and labels the PR `review-passed`. It never merges: a maintainer merges by
+Then it turns the block's status to `pass` (fused shows Live once merged),
+labels the PR `review-passed` and sets the required `review` commit status
+on that head to success (the check left it pending, so the request could
+not be merged before the confirm). It never merges: a maintainer merges by
 hand (owner, 2026-10-26). A later push re-runs the check, whose fresh block
 says `needs-confirmation` again, so a confirmation cannot be ridden.
 Anything else: no action, with the reason in the job log.
@@ -79,6 +81,9 @@ def main() -> int:
     gh.edit_comment(repo, bot["id"], check.render_comment(
         result, confirmed_by=pr["user"]["login"]))
     check.set_label(gh, repo, number, "review-passed")
+    # The check left the required `review` status pending for exactly this
+    # head; the confirmation is what makes it mergeable.
+    check.status_for(gh, repo, sha, check.STATUS_STATE["pass"], check.STATUS_TEXT["pass"])
     try:
         gh.react(repo, event["comment"]["id"], "+1")
     except Exception as e:  # noqa: BLE001 — a reaction is decoration

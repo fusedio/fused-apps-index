@@ -1,0 +1,16 @@
+{
+  "slug": "cool-maps",
+  "repo": "alice/cool-maps",
+  "branch": "main",
+  "commit": "8db8ad5b525ba086440605f23b4c41d54183abc3",
+  "name": "Cool Maps",
+  "description": "The cool-maps app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}

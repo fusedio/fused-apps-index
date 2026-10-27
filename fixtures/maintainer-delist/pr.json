@@ -1,0 +1,20 @@
+{
+  "author": "vasu2001",
+  "files": [
+    {
+      "filename": "apps/cool-maps.json",
+      "status": "removed"
+    },
+    {
+      "filename": "collections.json",
+      "status": "modified"
+    }
+  ],
+  "title": "Remove Cool Maps",
+  "body": "",
+  "github": {
+    "maintainers": [
+      "vasu2001"
+    ]
+  }
+}

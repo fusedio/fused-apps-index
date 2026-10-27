@@ -11,6 +11,7 @@
 # must never be added to this file: a job skipped by `if:` reports a
 # "skipped" check named `review`, which branch protection counts as passing.
 # The fixtures run on pull requests from fixtures.yml instead.
+# Third-party actions are pinned by commit sha (the tag in the comment).
 name: review
 
 on:
@@ -40,13 +41,14 @@ jobs:
       issues: write          # labels live on the issue side
       statuses: write        # the `review` status on the PR head (required check)
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
         with:
           python-version: "3.12"
-      - run: python -m pip install --disable-pip-version-check --no-input anthropic
+      # Pinned: this job holds write scopes, so nothing it installs floats.
+      - run: python -m pip install --disable-pip-version-check --no-input anthropic==2.3.0
       - name: Review
         run: python -I scripts/review/check.py
         env:
@@ -65,14 +67,15 @@ jobs:
       group: review-${{ github.event.issue.number }}-confirm
       cancel-in-progress: false
     permissions:
-      contents: write
+      contents: read
       pull-requests: write
       issues: write
+      statuses: write        # flips the pending `review` status to success on confirm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
         with:
           python-version: "3.12"
       - name: Confirm
@@ -94,11 +97,11 @@ jobs:
     steps:
       # Scripts come from main; entries go to the `reviews` branch through a
       # worktree reviews_sync.py makes (it starts the branch if it is absent).
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
         with:
           python-version: "3.12"
       - name: Sync review entries
@@ -117,10 +120,10 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
         with:
           python-version: "3.12"
       - run: python3 -I scripts/review/run_fixtures.py

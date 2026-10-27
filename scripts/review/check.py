@@ -7,7 +7,11 @@ one-line plain reason; an error anywhere is a fail too (M3).
 
     1 Files   only `apps/<slug>.json`, one slug (maintainers: see below)
     2 Who     the PR author owns `row.repo` (old and new row), or is a
-              PUBLIC member of the owning org
+              PUBLIC member of the owning org — by the repo's identity:
+              GitHub's answer for the repo must carry the row's own name
+              (a renamed or moved repo fails) and its owner login is the
+              owner; a repo whose numeric id differs from the one the
+              slug's review entries recorded fails too
     3 Shape   the row schema, unique slug and repo, remix_of exists, branch
               = the repo's default branch, icon/preview exist at commit
     4 Which commit  compare `<branch>...<commit>` is identical or behind
@@ -15,24 +19,31 @@ one-line plain reason; an error anywhere is a fail too (M3).
               text): any hit fails, nothing overrules it
     6 Claude's review   whole app (first listing) or the diff from the
               previous approved commit (update). SKIPPED (not failed) while
-              ANTHROPIC_API_KEY is unset or empty: the block then carries
-              `"claude": "skipped"`, What's new comes from the request's own
-              text, and new powers from `rules.powers` alone. With a key, an
-              API error, timeout or invalid answer still fails (M3).
+              ANTHROPIC_API_KEY is unset or empty (owner's call): the block
+              then carries `"claude": "skipped"` (reviews_sync copies it into
+              the review entry, the backend serves it), What's new comes from
+              the request's own text, and new powers from `rules.powers`
+              alone. With a key, an API error, timeout or invalid answer
+              still fails (M3).
     7 New powers  `rules.powers` ∪ the model's list: non-empty passes the
-              check but waits for `fused: confirm <sha>` (the status stays
-              success; the label says what is waited for)
+              review but the `review` status stays PENDING (unmergeable)
+              until the author's `fused: confirm <sha>` (confirm.py sets it
+              to success)
     8 Result  ONE comment with the `<!-- fused-review {...} -->` block,
               labels, the `review` commit status on the PR head (pending
-              while running; success on pass/needs-confirmation; failure).
+              while running; success on pass; pending on
+              needs-confirmation; failure).
               NOTHING MERGES ON ITS OWN: a maintainer merges every pull
               request by hand once the check is green (owner, 2026-10-26;
               the earlier `gh pr merge --auto` on a clean pass is gone).
 
 Pull requests that change anything but one row (block list, collections,
-categories, the check itself) are maintainer changes: from an index admin
-or maintainer they pass with "a person reviews and merges this"; from
-anyone else they fail step 1.
+categories, the check itself) are maintainer changes: from anyone but an
+index admin or maintainer they fail step 1. From a maintainer: a changed
+`blocklist.json` must match its schema (step 3); an `apps/<slug>.json` the
+request also changes runs steps 2-7 like an author's (one row per request;
+a maintainer may delist any row); the rest passes with "a person reviews
+and merges this".
 
 Usage (the workflow): `python scripts/review/check.py` with GITHUB_EVENT_PATH,
 GITHUB_REPOSITORY, GITHUB_TOKEN, GH_TOKEN and ANTHROPIC_API_KEY set.
@@ -145,6 +156,16 @@ class LiveSource:
     def app_tree(self, repo: str, sha: str) -> list:
         return fetch_app.fetch_tree(repo, sha, token=self.gh.token or None)
 
+    def review_entries(self, slug: str) -> list:
+        """The slug's review entries on the bot's `reviews` branch ([] when
+        it has none). A read error propagates: `main` fails closed."""
+        text = self.gh.file_text(self.index_repo, f"reviews/{slug}.json", "reviews")
+        try:
+            data = json.loads(text) if text else []
+        except ValueError:
+            return []
+        return data if isinstance(data, list) else []
+
     def review(self, **kw):
         return claude_review.review(**kw)
 
@@ -181,15 +202,28 @@ def _steps(src, index: Index, pr: dict) -> dict:
             others.append(name)
             if f.get("previous_filename"):
                 others.append(f["previous_filename"])
+    maintainer = False
     if others or not rows:
-        if src.is_maintainer(author):
+        if not src.is_maintainer(author):
+            if not rows:
+                raise Fail(1, "This request doesn't change an app listing (apps/<name>.json).")
+            shown = ", ".join(sorted(set(others))[:5])
+            raise Fail(1, f"This request changes files other than one app listing ({shown}). "
+                          "Only Fused maintainers change those.")
+        # A person reviews a maintainer change, but the block list is read
+        # by every copy of every app: a typo there must fail here, not
+        # quietly reach the backend (which then serves its last good list).
+        if "blocklist.json" in others:
+            problems = blocklist_problems(src.head_text("blocklist.json"))
+            if problems:
+                raise Fail(3, problems)
+        if not rows:
             return {"kind": "maintainer",
                     "whats_new": "A maintainer change. A person reviews and merges it."}
-        if not rows:
-            raise Fail(1, "This request doesn't change an app listing (apps/<name>.json).")
-        shown = ", ".join(sorted(set(others))[:5])
-        raise Fail(1, f"This request changes files other than one app listing ({shown}). "
-                      "Only Fused maintainers change those.")
+        # A listing change inside a maintainer request gets the full review
+        # below, like any author's (its commit would otherwise merge
+        # unreviewed and still show as reviewed).
+        maintainer = True
     if len(rows) > 1:
         raise Fail(1, "One app per request: this request changes the listings of "
                       + ", ".join(sorted(s for s, _ in rows)[:5]) + ".")
@@ -199,7 +233,16 @@ def _steps(src, index: Index, pr: dict) -> dict:
     if status == "removed":
         if old is None:
             raise Fail(1, f"There is no listing called {slug} to remove.")
-        _who(src, author, str(old.get("repo") or ""))
+        old_repo = str(old.get("repo") or "")
+        if maintainer:
+            # Taking a listing down merges no code; maintainers may do it
+            # for any app (moderation), a person still merges it.
+            return {"slug": slug, "kind": "delist",
+                    "whats_new": "Removed from the Marketplace by a Fused maintainer."}
+        old_meta = src.repo_meta(old_repo) if REPO_RE.match(old_repo) else None
+        # A repo that is gone (deleted) can still be delisted by the owner
+        # its row names; one that answers must still be that same repo.
+        _who(src, author, old_repo, old_meta if isinstance(old_meta, dict) else None)
         return {"slug": slug, "kind": "delist",
                 "whats_new": "Removed from the Marketplace by its author."}
 
@@ -213,19 +256,23 @@ def _steps(src, index: Index, pr: dict) -> dict:
     repo = row.get("repo")
     if not isinstance(repo, str) or not REPO_RE.match(repo):
         raise Fail(3, "The listing's repo must be written as owner/name.")
+    meta = src.repo_meta(repo)
+    if not isinstance(meta, dict) or meta.get("private"):
+        raise Fail(3, f"{repo} can't be found, or it isn't public.")
 
-    # 2. Who
-    _who(src, author, repo)
+    # 2. Who — by the repo's identity, not only the text of its name.
+    _who(src, author, repo, meta)
     if old is not None and status == "modified":
-        _who(src, author, str(old.get("repo") or ""))
+        old_repo = str(old.get("repo") or "")
+        if old_repo.lower() != repo.lower():
+            old_meta = src.repo_meta(old_repo) if REPO_RE.match(old_repo) else None
+            _who(src, author, old_repo, old_meta if isinstance(old_meta, dict) else None)
+    _same_repo_as_before(src, slug, repo, meta)
 
     # 3. Shape
     problems = shape_problems(row, slug, index, status)
     if problems:
         raise Fail(3, problems)
-    meta = src.repo_meta(repo)
-    if not isinstance(meta, dict) or meta.get("private"):
-        raise Fail(3, f"{repo} can't be found, or it isn't public.")
     if row["branch"] != meta.get("default_branch"):
         raise Fail(3, f"The listing must follow {repo}'s main branch "
                       f"({meta.get('default_branch')}), not {row['branch']}.")
@@ -332,8 +379,20 @@ def fallback_whats_new(pr: dict) -> str:
     return text[:700]
 
 
-def _who(src, author: str, repo: str) -> None:
+def _who(src, author: str, repo: str, meta: dict | None = None) -> None:
+    """The PR author may publish `repo`. With `meta` (GitHub's answer for
+    the repo) the check is by identity: GitHub follows a renamed or moved
+    repo's old name silently, so the name GitHub answers must be the one
+    the row names, and the owner is the account GitHub reports, not the
+    text before the slash."""
     owner = repo.split("/", 1)[0]
+    if meta is not None:
+        full = str(meta.get("full_name") or "")
+        if full.lower() != repo.lower():
+            raise Fail(2, f"{repo} now lives at {full or 'another address'} on GitHub (it was "
+                          "renamed or moved). The listing must name the repo where it lives; "
+                          "a Fused maintainer can move an existing listing.")
+        owner = str((meta.get("owner") or {}).get("login") or "")
     if owner and owner.lower() == author.lower():
         return
     if owner and src.user_type(owner) == "Organization":
@@ -344,6 +403,59 @@ def _who(src, author: str, repo: str) -> None:
                       "try again.")
     raise Fail(2, f"Only {owner or 'its owner'} can list or change the listing of "
                   f"{repo or 'this app'}.")
+
+
+def _same_repo_as_before(src, slug: str, repo: str, meta: dict) -> None:
+    """A slug's releases all come from ONE GitHub repo. The review entries
+    (the `reviews` branch keeps them after a delist too) record GitHub's
+    numeric repo id; when the repo under the same name has a different id —
+    an account renamed and its old login taken, a repo deleted and made
+    again — the copies following this slug must not follow it."""
+    rid = meta.get("id")
+    if not isinstance(rid, int):
+        return
+    for e in src.review_entries(slug):
+        prev = e.get("repo_id") if isinstance(e, dict) else None
+        if isinstance(prev, int) and prev != rid:
+            raise Fail(2, f"{slug} was listed from a different GitHub repository that had the "
+                          f"name {repo}. A Fused maintainer has to look at this one.")
+
+
+BLOCK_KEYS = ("slug", "commit", "level", "reason", "what_to_do", "at")
+
+
+def blocklist_problems(text: str | None) -> list:
+    """`blocklist.json` must be `{"blocked": [entry]}`, each entry exactly
+    {slug, commit (40 hex), level hard|soft, reason, what_to_do, at}."""
+    if text is None:
+        return ["blocklist.json must stay in the index (an empty list is {\"blocked\": []})."]
+    try:
+        data = json.loads(text)
+    except ValueError as e:
+        return [f"blocklist.json isn't valid JSON ({e.msg}, line {e.lineno})."]
+    if not isinstance(data, dict) or set(data) != {"blocked"} or not isinstance(data["blocked"], list):
+        return ["blocklist.json must be an object with one key, blocked, holding a list."]
+    out = []
+    for i, b in enumerate(data["blocked"], 1):
+        where = f"Block list entry {i}"
+        if not isinstance(b, dict):
+            out.append(f"{where} isn't an object.")
+            continue
+        if set(b) != set(BLOCK_KEYS):
+            out.append(f"{where} must have exactly: " + ", ".join(BLOCK_KEYS) + ".")
+            continue
+        if not isinstance(b["slug"], str) or not SLUG_RE.match(b["slug"]):
+            out.append(f"{where}: slug isn't a listing name.")
+        if not isinstance(b["commit"], str) or not SHA_RE.match(b["commit"]):
+            out.append(f"{where}: commit must be a full 40-character version id.")
+        if b["level"] not in ("hard", "soft"):
+            out.append(f"{where}: level must be hard or soft.")
+        for k in ("reason", "what_to_do"):
+            if not isinstance(b[k], str) or not b[k].strip():
+                out.append(f"{where}: {k} must be a sentence.")
+        if not isinstance(b["at"], str) or not re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$", b["at"]):
+            out.append(f"{where}: at must be a time like 2026-10-27T09:00:00Z.")
+    return out[:8]
 
 
 def shape_problems(row: dict, slug: str, index: Index, status: str) -> list:
@@ -493,8 +605,12 @@ def set_label(gh: GitHub, repo: str, number: int, label: str | None) -> None:
 
 
 STATUS_TEXT = {"pass": "Review passed", "needs-confirmation":
-               "Review passed; new powers wait for the author's confirmation",
+               "Waiting for the author to confirm the new powers",
                "fail": "Review failed"}
+#: The required `review` status per result. New powers keep it PENDING (so
+#: the request cannot be merged) until the author's `fused: confirm`, which
+#: confirm.py turns into success (D9).
+STATUS_STATE = {"pass": "success", "needs-confirmation": "pending", "fail": "failure"}
 
 
 def status_for(gh: GitHub, repo: str, sha: str, state: str, text: str) -> None:
@@ -541,8 +657,7 @@ def main() -> int:
         print(f"could not post the result: {e}", file=sys.stderr)
         status_for(gh, repo, head, "failure", "The review could not post its result")
         return 1
-    status_for(gh, repo, head, "failure" if result["status"] == "fail" else "success",
-               STATUS_TEXT[result["status"]])
+    status_for(gh, repo, head, STATUS_STATE[result["status"]], STATUS_TEXT[result["status"]])
     # No merge here: a maintainer merges by hand once the status is green.
     return 1 if result["status"] == "fail" else 0
 

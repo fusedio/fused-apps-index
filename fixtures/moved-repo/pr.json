@@ -1,0 +1,31 @@
+{
+  "author": "alice",
+  "files": [
+    {
+      "filename": "apps/notes.json",
+      "status": "added"
+    }
+  ],
+  "title": "List clean-listing",
+  "body": "",
+  "model": [
+    {
+      "answer": {
+        "verdict": "pass",
+        "reasons": [],
+        "whats_new": "A note box that counts your words.",
+        "new_powers": []
+      }
+    }
+  ],
+  "github": {
+    "repos": {
+      "alice/notes": {
+        "full_name": "bob/notes",
+        "owner": {
+          "login": "bob"
+        }
+      }
+    }
+  }
+}

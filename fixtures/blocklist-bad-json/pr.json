@@ -1,0 +1,16 @@
+{
+  "author": "vasu2001",
+  "files": [
+    {
+      "filename": "blocklist.json",
+      "status": "modified"
+    }
+  ],
+  "title": "Block a release",
+  "body": "",
+  "github": {
+    "maintainers": [
+      "vasu2001"
+    ]
+  }
+}

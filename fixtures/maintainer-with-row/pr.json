@@ -1,0 +1,20 @@
+{
+  "author": "vasu2001",
+  "files": [
+    {
+      "filename": "blocklist.json",
+      "status": "modified"
+    },
+    {
+      "filename": "apps/cool-maps.json",
+      "status": "added"
+    }
+  ],
+  "title": "Block + list",
+  "body": "",
+  "github": {
+    "maintainers": [
+      "vasu2001"
+    ]
+  }
+}

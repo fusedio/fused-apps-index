@@ -1,0 +1,16 @@
+{
+  "author": "vasu2001",
+  "files": [
+    {
+      "filename": "blocklist.json",
+      "status": "removed"
+    }
+  ],
+  "title": "Drop the block list",
+  "body": "",
+  "github": {
+    "maintainers": [
+      "vasu2001"
+    ]
+  }
+}
