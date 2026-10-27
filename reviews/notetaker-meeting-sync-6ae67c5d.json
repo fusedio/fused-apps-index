@@ -1,0 +1,16 @@
+[
+  {
+    "commit": "a22b5e564ef163310710714ae08cec8216904b5a",
+    "at": "2026-10-27T12:20:41Z",
+    "whats_new": "First release: Meeting notes app as notebook.",
+    "new_powers": [
+      "Changes the tools Claude can use in this app",
+      "Sends or loads data from app.notion.com"
+    ],
+    "credits": [],
+    "pr": 16,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1434202335
+  }
+]
