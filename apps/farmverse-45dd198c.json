@@ -1,0 +1,18 @@
+{
+  "slug": "farmverse-45dd198c",
+  "repo": "amanbagrecha/farmverse",
+  "branch": "main",
+  "commit": "0ffd30b34a39f51bae21fc07c43e5f6117d032b7",
+  "name": "FarmVerse",
+  "description": "immersive farming game",
+  "category": "geospatial",
+  "tags": [
+    "farm",
+    "maps",
+    "satellite"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
