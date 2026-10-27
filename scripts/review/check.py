@@ -30,7 +30,8 @@ one-line plain reason; an error anywhere is a fail too (M3).
     7 New powers  `rules.powers` ∪ the model's list: non-empty passes the
               review but the `review` status stays PENDING (unmergeable)
               until the author's `fused: confirm <sha>` (confirm.py sets it
-              to success)
+              to success). GATE OFF for now (`REQUIRE_CONFIRM = False`):
+              the powers are listed, the result is `pass`, nothing waits.
     8 Result  ONE comment with the `<!-- fused-review {...} -->` block,
               labels, the `review` commit status on the PR head (pending
               while running; success on pass; pending on
@@ -81,6 +82,12 @@ ASSET_RE = re.compile(r"^(?!/)(?!.*(?:^|/)\.\.(?:/|$))[^\\\0\n]{1,200}"
                       r"\.(?:png|jpe?g|gif|webp|svg|avif)$", re.I)
 BLOCK_RE = re.compile(r"<!-- fused-review (\{.*?\}) -->", re.S)
 LABELS = ("review-passed", "needs-confirmation", "review-failed")
+#: The confirm gate (step 7). OFF for now (owner, 2026-10-27: "relax it"):
+#: new powers are still found and listed in the comment and the block, but
+#: the result is `pass` and the `review` status goes green without the
+#: author's `fused: confirm`. Flip to True to bring the gate (and the
+#: `confirm` job in review.yml) back.
+REQUIRE_CONFIRM = False
 # Anyone with write access to the index is a maintainer (owner, 2026-10-27:
 # "simplify it" — the index is an org repo now, and write access there IS
 # membership). Everyone else is an author: one row per request, steps 2-7.
@@ -348,7 +355,7 @@ def _steps(src, index: Index, pr: dict) -> dict:
             powers.append({"kind": p["kind"], "detail": p["detail"]})
     out = {"slug": slug, "kind": "update" if diff is not None else "list",
            "whats_new": answer["whats_new"], "new_powers": powers[:16],
-           "status": "needs-confirmation" if powers else "pass"}
+           "status": "needs-confirmation" if powers and REQUIRE_CONFIRM else "pass"}
     if claude:
         out["claude"] = claude
     return out
@@ -600,6 +607,9 @@ def render_comment(result: dict, *, confirmed_by: str | None = None) -> str:
         lines.append("### Review passed")
         if confirmed_by:
             lines.append(f"The author ({_md(confirmed_by)}) confirmed the new powers.")
+        elif result.get("new_powers"):
+            lines.append("This release lets the app do new things:")
+            lines += [f"- {_md(p['detail'])}" for p in result["new_powers"]]
         lines.append("A Fused maintainer merges it; the app is listed once that lands.")
     if result.get("claude") == "skipped" and st != "fail":
         lines += ["", CLAUDE_OFF]

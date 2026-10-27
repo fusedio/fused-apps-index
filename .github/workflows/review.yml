@@ -56,8 +56,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
+  # DISABLED for now (owner, 2026-10-27): check.py's REQUIRE_CONFIRM is off, so
+  # no review ever says needs-confirmation and there is nothing to confirm.
+  # Drop the `false &&` (and flip REQUIRE_CONFIRM) to bring the gate back.
   confirm:
     if: >-
+      false &&
       github.event_name == 'issue_comment' &&
       github.event.issue.pull_request &&
       startsWith(github.event.comment.body, 'fused: confirm')
