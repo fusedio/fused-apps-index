@@ -1,0 +1,19 @@
+[
+  {
+    "commit": "02da3265357bace7095d829f1c87c264eba61428",
+    "at": "2026-10-27T14:45:25Z",
+    "whats_new": "First release: print maps for foldable globe.",
+    "new_powers": [
+      "Sends or loads data from raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson",
+      "Sends or loads data from foldingglobes.com",
+      "Installs packages: h3, numpy, pillow, requests",
+      "Sends or loads data from pypi.org",
+      "Sends or loads data from files.pythonhosted.org"
+    ],
+    "credits": [],
+    "pr": 22,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1435858587
+  }
+]
