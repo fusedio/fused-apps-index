@@ -1,0 +1,17 @@
+{
+  "slug": "hagaki-438cbd6e",
+  "repo": "amanbagrecha/hagaki",
+  "branch": "main",
+  "commit": "84d37d9a3a8e2913048cdf2ea7fdc0b9fafad20f",
+  "name": "Hagaki",
+  "description": "Postcards of your screenshots",
+  "category": "productivity",
+  "tags": [
+    "record",
+    "screenshot"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
