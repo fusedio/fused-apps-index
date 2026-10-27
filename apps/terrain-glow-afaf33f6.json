@@ -1,0 +1,17 @@
+{
+  "slug": "terrain-glow-afaf33f6",
+  "repo": "amanbagrecha/terrain-glow",
+  "branch": "main",
+  "commit": "04ecd08a09b3986600f9016a2732b2a11187f0c2",
+  "name": "Terrain Glow",
+  "description": "Capture cinematic view of the world",
+  "category": "productivity",
+  "tags": [
+    "maps",
+    "satellite"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
