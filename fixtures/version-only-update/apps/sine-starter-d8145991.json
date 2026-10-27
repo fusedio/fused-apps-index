@@ -1,0 +1,17 @@
+{
+  "slug": "sine-starter-d8145991",
+  "repo": "vasu2001/sine-starter-fixture",
+  "branch": "main",
+  "commit": "ac4e225cb3002531c5ebf18892a0757c21eae11c",
+  "name": "Sine Starter",
+  "description": "The minimal fused-app: a slider, a Python main() that computes a sine wave, and a canvas plot. Copy it to start your own.",
+  "category": "starters",
+  "tags": [
+    "starter",
+    "example"
+  ],
+  "icon": null,
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.0.2"
+}

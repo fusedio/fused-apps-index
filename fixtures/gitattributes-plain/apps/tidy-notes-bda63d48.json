@@ -1,0 +1,16 @@
+{
+  "slug": "tidy-notes-bda63d48",
+  "repo": "alice/tidy-notes",
+  "branch": "main",
+  "commit": "1da2df142c2e79d3d07f2be94741995923d681e5",
+  "name": "Tidy Notes",
+  "description": "The tidy-notes app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}

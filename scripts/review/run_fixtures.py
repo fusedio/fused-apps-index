@@ -47,6 +47,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 import check  # noqa: E402
+import app_id  # noqa: E402
 import claude_review  # noqa: E402
 import confirm  # noqa: E402
 import fetch_app  # noqa: E402
@@ -365,6 +366,34 @@ def rules_copy_check() -> str | None:
     return "ok"
 
 
+def app_id_parity_check() -> str | None:
+    """`app_id.py` copies fused-render's id rule: same regexes, same answers.
+    Only with FUSED_RENDER_SRC (a local fused-render checkout)."""
+    src = os.environ.get("FUSED_RENDER_SRC")
+    if not src:
+        return None
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "fr_app_id", os.path.join(src, "fused_render", "app_id.py"))
+    fr = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(fr)
+    for name in ("ID_RE", "_TAG_RE", "_CONTENT_RE"):
+        if getattr(fr, name).pattern != getattr(app_id, name).pattern:
+            return f"app_id.{name} differs from fused_render/app_id.py"
+    marker = 'rb"<meta\\s[^>]*name\\s*=\\s*[\\"\']?fused-app[\\"\']?"'
+    for path in (os.path.join(src, "fused_render", "app_listing.py"),
+                 os.path.join(HERE, "app_id.py")):
+        with open(path, encoding="utf-8") as fh:
+            if marker not in fh.read():
+                return f"the fused-app marker regex differs in {path}"
+    for head in ('<meta name="fused-app-id" content="my-app-82de2580">',
+                 "<meta content='x-0123abcd' name=fused-app-id>",
+                 '<meta name="fused-app-id" content="Bad_Id">', "<head></head>"):
+        if fr.id_from_text(head) != app_id.id_from_text(head):
+            return f"id_from_text disagrees on {head!r}"
+    return "ok"
+
+
 def main() -> int:
     failures = 0
     names = sorted(n for n in os.listdir(FIXTURES)
@@ -395,6 +424,14 @@ def main() -> int:
         print(f"FAIL  {copy}")
     else:
         print("ok    rules.py is a verbatim copy of review_rules.py")
+    parity = app_id_parity_check()
+    if parity is None:
+        print("skip  app_id.py parity check (set FUSED_RENDER_SRC)")
+    elif parity != "ok":
+        failures += 1
+        print(f"FAIL  {parity}")
+    else:
+        print("ok    app_id.py matches fused_render/app_id.py + the entry marker")
     print(f"\n{len(names)} fixtures, {failures} failure(s)")
     return 1 if failures else 0
 

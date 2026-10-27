@@ -1,0 +1,16 @@
+{
+  "slug": "word-count-c2924716",
+  "repo": "alice/word-count",
+  "branch": "main",
+  "commit": "80bc53a4382db7075672e45748880075dcb79b89",
+  "name": "Word Count",
+  "description": "The word-count app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}

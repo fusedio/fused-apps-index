@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+<meta name="fused-app" />
+<meta charset="utf-8"><title>Notes</title></head>
+<body>
+  <textarea id="note"></textarea>
+  <button id="save">Save</button>
+  <script>
+    document.getElementById("save").onclick = async () => {
+      const text = document.getElementById("note").value;
+      const out = await fused.runPython("./main.py", {text});
+      console.log(out);
+    };
+  </script>
+</body>
+</html>

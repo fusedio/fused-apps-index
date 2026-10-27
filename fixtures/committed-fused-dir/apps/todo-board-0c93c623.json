@@ -1,0 +1,16 @@
+{
+  "slug": "todo-board-0c93c623",
+  "repo": "alice/todo-board",
+  "branch": "main",
+  "commit": "359d8a66de065b8229a8b51aabdfd6bf088f62bd",
+  "name": "Todo Board",
+  "description": "The todo-board app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}

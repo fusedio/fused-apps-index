@@ -1,0 +1,16 @@
+{
+  "slug": "refused-a503bc1d",
+  "repo": "alice/refused",
+  "branch": "main",
+  "commit": "cac59294f082c8e0f77ebd7da996840899b48147",
+  "name": "Refused",
+  "description": "The refused app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}

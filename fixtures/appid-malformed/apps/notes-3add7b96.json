@@ -1,0 +1,16 @@
+{
+  "slug": "notes-3add7b96",
+  "repo": "alice/notes",
+  "branch": "main",
+  "commit": "7b5787f2d00a1d82441e1a6adb5da074e5af7636",
+  "name": "Notes",
+  "description": "The notes app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}

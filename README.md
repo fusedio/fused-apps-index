@@ -18,7 +18,10 @@ it. Every such pull request runs the `review` check:
    organization that does). Private org membership can't be seen by the check;
    make it public to list an org's app.
 3. **Shape.** The listing has exactly the fields below, a free name, a repo
-   not listed under another name, and follows the repo's main branch.
+   not listed under another name, and follows the repo's main branch. Its
+   slug is the app's `fused-app-id`: the entry page at that version (the
+   first top-level `.html` with `<meta name="fused-app">`) must declare
+   `<meta name="fused-app-id" content="<slug>">`.
 4. **Which commit.** The version is on the author's main branch (a version
    that exists only in someone else's copy is refused).
 5. **Fixed rules.** The app at that version has none of: code downloaded and
@@ -66,14 +69,18 @@ for a slug the branch doesn't have yet. Readers take the branch first.
 A row:
 
 ```json
-{"slug": "sine-starter", "repo": "vasu2001/sine-starter", "branch": "main",
+{"slug": "sine-starter-82de2580", "repo": "vasu2001/sine-starter", "branch": "main",
  "commit": "<40 hex>", "name": "Sine Starter", "description": "…",
  "category": "starters", "tags": ["starter"], "icon": null,
  "preview": "preview.png", "remix_of": null, "version": "1.0.1"}
 ```
 
-Every key is required and no others are allowed. `slug` is the file name
-(`[a-z0-9][a-z0-9-]{1,63}`); `icon` and `preview` are image paths inside the
+Every key is required and no others are allowed. `slug` is the app's
+`fused-app-id` and the file name (`<kebab name>-<8 hex>`, fused stamps it in
+the app's entry page when the app is created or first exported, and it never
+changes); the check compares it with the entry page at `commit`. Rows listed
+before 2026-10-27 (`simple-calc`, `sine-starter`) predate this and stay as
+they are until they are published again from fused. `icon` and `preview` are image paths inside the
 app's repo at `commit`, or null; `remix_of` is another listed slug, or null.
 
 The block list: `{"blocked": [entry]}`, each entry exactly `{"slug",

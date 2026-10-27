@@ -1,0 +1,16 @@
+{
+  "slug": "chatty-8869899e",
+  "repo": "alice/chatty",
+  "branch": "main",
+  "commit": "90924e684cc066e9ce21d3eba8b7fe997eba3969",
+  "name": "Chatty",
+  "description": "The chatty app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}

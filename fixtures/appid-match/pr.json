@@ -1,0 +1,21 @@
+{
+  "author": "alice",
+  "files": [
+    {
+      "filename": "apps/notes-3add7b96.json",
+      "status": "added"
+    }
+  ],
+  "title": "List appid-match",
+  "body": "",
+  "model": [
+    {
+      "answer": {
+        "verdict": "pass",
+        "reasons": [],
+        "whats_new": "A note box that counts your words.",
+        "new_powers": []
+      }
+    }
+  ]
+}

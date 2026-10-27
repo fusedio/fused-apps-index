@@ -13,7 +13,9 @@ one-line plain reason; an error anywhere is a fail too (M3).
               owner; a repo whose numeric id differs from the one the
               slug's review entries recorded fails too
     3 Shape   the row schema, unique slug and repo, remix_of exists, branch
-              = the repo's default branch, icon/preview exist at commit
+              = the repo's default branch, icon/preview exist at commit,
+              slug = the `fused-app-id` the entry page declares at commit
+              (`app_id.py`; checked once the app's files are read)
     4 Which commit  compare `<branch>...<commit>` is identical or behind
     5 Fixed rules   `rules.hard_hits` over the app at commit (+ the listing
               text): any hit fails, nothing overrules it
@@ -59,6 +61,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import app_id  # noqa: E402
 import claude_review  # noqa: E402
 import fetch_app  # noqa: E402
 import rules  # noqa: E402
@@ -290,6 +293,7 @@ def _steps(src, index: Index, pr: dict) -> dict:
         tree = src.app_tree(repo, row["commit"])
     except fetch_app.FetchError as e:
         raise Fail(5, str(e)) from None
+    _slug_is_app_id(tree, slug)
     paths = {e["path"] for e in tree if e.get("mode") != "120000"}
     for key in ("icon", "preview"):
         if row[key] is not None and row[key] not in paths:
@@ -403,6 +407,28 @@ def _who(src, author: str, repo: str, meta: dict | None = None) -> None:
                       "try again.")
     raise Fail(2, f"Only {owner or 'its owner'} can list or change the listing of "
                   f"{repo or 'this app'}.")
+
+
+def _slug_is_app_id(tree: list, slug: str) -> None:
+    """Step 3: the listing is keyed by the app's identity. Its slug must be
+    the `fused-app-id` its entry page declares at the listed commit, so one
+    slug names one app for its whole life (a rename, a new repo name or a
+    different app under a familiar name cannot take it over)."""
+    entry = app_id.entry_of(tree)
+    if entry is None:
+        raise Fail(3, "The app has no entry page at that version (an .html file at its top "
+                      "level with <meta name=\"fused-app\">), so its fused-app-id can't be read.")
+    found = app_id.id_from_text(entry["text"])
+    if found == slug:
+        return
+    if found is not None:
+        raise Fail(3, f"The listing's slug must be the app's fused-app-id ({found}); "
+                      f"this row says {slug}.")
+    raw = app_id.raw_id(entry["text"])
+    what = (f"{entry['path']} declares no fused-app-id" if raw is None else
+            f"the fused-app-id in {entry['path']} ({raw[:70]}) isn't a valid id")
+    raise Fail(3, f"The listing's slug must be the app's fused-app-id, but {what}. fused "
+                  "stamps one when the app is created or first exported; publish from fused.")
 
 
 def _same_repo_as_before(src, slug: str, repo: str, meta: dict) -> None:

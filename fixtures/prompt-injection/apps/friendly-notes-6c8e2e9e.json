@@ -1,0 +1,16 @@
+{
+  "slug": "friendly-notes-6c8e2e9e",
+  "repo": "alice/friendly-notes",
+  "branch": "main",
+  "commit": "4b2c083aebb01ab5fcb10e9d62f6565c860525b7",
+  "name": "Friendly Notes",
+  "description": "The friendly-notes app.",
+  "category": "productivity",
+  "tags": [
+    "example"
+  ],
+  "icon": null,
+  "preview": null,
+  "remix_of": null,
+  "version": "1.0.0"
+}
