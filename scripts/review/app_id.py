@@ -29,7 +29,9 @@ _TAG_RE = re.compile(
     rb"<meta\s[^>]*name\s*=\s*[\"']?fused-app-id[\"']?[^>]*>", re.IGNORECASE)
 _CONTENT_RE = re.compile(rb"content\s*=\s*[\"']([^\"']*)[\"']", re.IGNORECASE)
 _FUSED_META_RE = re.compile(
-    rb"<meta\s[^>]*name\s*=\s*[\"']?fused-app[\"']?", re.IGNORECASE)
+    # The value must END there (closing quote, or unquoted then a space,
+    # `/` or `>`): `name="fused-app-id"` is the app id tag, not the marker.
+    rb"<meta\s[^>]*name\s*=\s*(?:\"fused-app\"|'fused-app'|fused-app(?=[\s/>]))", re.IGNORECASE)
 
 
 def is_valid(value: object) -> bool:

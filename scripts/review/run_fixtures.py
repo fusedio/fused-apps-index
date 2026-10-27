@@ -380,12 +380,14 @@ def app_id_parity_check() -> str | None:
     for name in ("ID_RE", "_TAG_RE", "_CONTENT_RE"):
         if getattr(fr, name).pattern != getattr(app_id, name).pattern:
             return f"app_id.{name} differs from fused_render/app_id.py"
-    marker = 'rb"<meta\\s[^>]*name\\s*=\\s*[\\"\']?fused-app[\\"\']?"'
-    for path in (os.path.join(src, "fused_render", "app_listing.py"),
-                 os.path.join(HERE, "app_id.py")):
-        with open(path, encoding="utf-8") as fh:
-            if marker not in fh.read():
-                return f"the fused-app marker regex differs in {path}"
+    import ast
+    with open(os.path.join(src, "fused_render", "app_listing.py"), encoding="utf-8") as fh:
+        tree = ast.parse(fh.read())
+    marker = next((n.value.args[0].value for n in ast.walk(tree)
+                   if isinstance(n, ast.Assign) and any(getattr(t, "id", "") == "_FUSED_META_RE"
+                                                        for t in n.targets)), None)
+    if marker != app_id._FUSED_META_RE.pattern:
+        return "app_id._FUSED_META_RE differs from fused_render/app_listing.py"
     for head in ('<meta name="fused-app-id" content="my-app-82de2580">',
                  "<meta content='x-0123abcd' name=fused-app-id>",
                  '<meta name="fused-app-id" content="Bad_Id">', "<head></head>"):
