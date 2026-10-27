@@ -1,0 +1,21 @@
+{
+  "slug": "mp3-player-manager-e372c3e0",
+  "repo": "vasu2001/fused-mp3-player-manager",
+  "branch": "main",
+  "commit": "7758518e52189558038a621082a38cbd8fce8bd9",
+  "name": "MP3 Player",
+  "description": "Grabs songs from YouTube, converts them to MP3 with cover art, and copies them onto your MP3 player.",
+  "category": "productivity",
+  "tags": [
+    "song",
+    "mp3",
+    "youtube",
+    "cat",
+    "cute",
+    "downloader"
+  ],
+  "icon": "icon.png",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
