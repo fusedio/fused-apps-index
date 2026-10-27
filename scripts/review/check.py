@@ -35,7 +35,9 @@ one-line plain reason; an error anywhere is a fail too (M3).
     8 Result  ONE comment with the `<!-- fused-review {...} -->` block,
               labels, the `review` commit status on the PR head (pending
               while running; success on pass; pending on
-              needs-confirmation; failure).
+              needs-confirmation; failure). NOT ENFORCED for now
+              (`ENFORCE = False`): the status is always success, so a
+              failed review is recorded but does not block the merge.
               NOTHING MERGES ON ITS OWN: a maintainer merges every pull
               request by hand once the check is green (owner, 2026-10-26;
               the earlier `gh pr merge --auto` on a clean pass is gone).
@@ -88,6 +90,13 @@ LABELS = ("review-passed", "needs-confirmation", "review-failed")
 #: author's `fused: confirm`. Flip to True to bring the gate (and the
 #: `confirm` job in review.yml) back.
 REQUIRE_CONFIRM = False
+#: Enforcement. OFF for now (owner, 2026-10-27): the check still runs every
+#: step, posts its comment, sets its label and exits 0, but the required
+#: `review` status on the head is ALWAYS success (its text says what the
+#: review found), so a failed review does not block the merge. The index
+#: is taking in many apps and the false positives get looked at later.
+#: Flip to True to make a fail block the merge again.
+ENFORCE = False
 # Anyone with write access to the index is a maintainer (owner, 2026-10-27:
 # "simplify it" — the index is an org repo now, and write access there IS
 # membership). Everyone else is an author: one row per request, steps 2-7.
@@ -696,9 +705,14 @@ def main() -> int:
         print(f"could not post the result: {e}", file=sys.stderr)
         status_for(gh, repo, head, "failure", "The review could not post its result")
         return 1
-    status_for(gh, repo, head, STATUS_STATE[result["status"]], STATUS_TEXT[result["status"]])
+    if ENFORCE:
+        status_for(gh, repo, head, STATUS_STATE[result["status"]],
+                   STATUS_TEXT[result["status"]])
+    else:
+        status_for(gh, repo, head, "success",
+                   f"{STATUS_TEXT[result['status']]} (not enforced)")
     # No merge here: a maintainer merges by hand once the status is green.
-    return 1 if result["status"] == "fail" else 0
+    return 1 if result["status"] == "fail" and ENFORCE else 0
 
 
 if __name__ == "__main__":

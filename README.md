@@ -49,6 +49,10 @@ it. Every such pull request runs the `review` check:
 8. **Result.** One comment on the pull request, with a machine-readable
    `<!-- fused-review {...} -->` block fused reads. Nothing merges on its
    own: a Fused maintainer merges the pull request once the check is green.
+   **Not enforced for now** (`ENFORCE = False` in `scripts/review/check.py`):
+   every step still runs and the comment and label say what it found, but
+   the required `review` status is always green, so a failed review does
+   not block the merge. The false positives get a pass later.
 
 Then, every 10 minutes, a job writes the release's plain-language "What's
 new" into `reviews/<slug>.json` on the **`reviews` branch**. `main` is fully
