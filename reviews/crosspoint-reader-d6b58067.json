@@ -1,0 +1,25 @@
+[
+  {
+    "commit": "40465616590c2bc8725cbd15c3bf43557e6a3975",
+    "at": "2026-10-27T10:58:31Z",
+    "whats_new": "First release: download and transfer epubs directly to crosspoint compatible readers from epub libraries.",
+    "new_powers": [
+      "Changes the tools Claude can use in this app",
+      "Sends or loads data from gutendex.com",
+      "Sends or loads data from www.gutenberg.org",
+      "Sends or loads data from 192.168.4.1",
+      "Sends or loads data from stuartk.com",
+      "Sends or loads data from raw.github.com",
+      "Sends or loads data from github.com/nodeca/pako/blob/main/LICENSE",
+      "Sends or loads data from stuk.github.io",
+      "Sends or loads data from github.com/crosspoint-reader/crosspoint-reader",
+      "Sends or loads data from www.idpf.org",
+      "Reads or writes files outside the app (in your home folder or elsewhere on this computer)"
+    ],
+    "credits": [],
+    "pr": 13,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1435448903
+  }
+]
