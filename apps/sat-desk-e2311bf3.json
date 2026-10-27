@@ -1,0 +1,17 @@
+{
+  "slug": "sat-desk-e2311bf3",
+  "repo": "amanbagrecha/sat-desk",
+  "branch": "main",
+  "commit": "30dd1f2ac473abc728da8311dd71ad103efb2cd1",
+  "name": "Sat Desk",
+  "description": "Investigate satellite tiles in real-time",
+  "category": "productivity",
+  "tags": [
+    "maps",
+    "satellite"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
