@@ -1,5 +1,20 @@
 [
   {
+    "commit": "67cd2227f646a756ef87d17b960b3ff666f75bd8",
+    "at": "2026-10-28T13:14:57Z",
+    "whats_new": "Merge pull request #2 from kashuk/fused-fused-mp3-player-manager-20261028-1309-0762; Prefill the YouTube link field with a default video.",
+    "new_powers": [
+      "Sends or loads data from www.youtube.com"
+    ],
+    "credits": [
+      "kashuk"
+    ],
+    "pr": 36,
+    "first": false,
+    "claude": "skipped",
+    "repo_id": 1435796331
+  },
+  {
     "commit": "ae65dfc0018516fe4e5fa6acd9c66c5d2351ab4d",
     "at": "2026-10-28T13:03:32Z",
     "whats_new": "Merge pull request #1 from kashuk/fused-fused-mp3-player-manager-20261028-1254-2fe9; Record a 30 minute clip of live streams instead of rejecting them; Download without the player and show the audio player when ready; reject live streams; Add audio player to YouTube card once the MP3 is available.",
