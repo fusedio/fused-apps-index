@@ -1,0 +1,28 @@
+[
+  {
+    "commit": "0147c822062e88f5732cf1aae6f3a97bc42e7f44",
+    "at": "2026-10-28T13:33:16Z",
+    "whats_new": "First release: A break-time companion: mix ambient sounds, follow guided breathing exercises, and track your daily relaxation minutes.",
+    "new_powers": [
+      "Sends or loads data from cdn.freesound.org",
+      "Sends or loads data from freesound.org",
+      "Sends or loads data from creativecommons.org",
+      "Sends or loads data from prod-1.storage.jamendo.com",
+      "Sends or loads data from www.jamendo.com",
+      "Sends or loads data from fonts.googleapis.com",
+      "Sends or loads data from fonts.gstatic.com",
+      "Sends or loads data from www.cell.com",
+      "Sends or loads data from www.drweil.com",
+      "Sends or loads data from www.breathingexercises.com",
+      "Sends or loads data from www.youtube.com",
+      "Sends or loads data from i.ytimg.com",
+      "Sends or loads data from www.youtube-nocookie.com",
+      "Sends or loads data from api.openverse.org"
+    ],
+    "credits": [],
+    "pr": 39,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1437126535
+  }
+]
