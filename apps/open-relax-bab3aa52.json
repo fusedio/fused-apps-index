@@ -1,0 +1,19 @@
+{
+  "slug": "open-relax-bab3aa52",
+  "repo": "kashuk/open-relax",
+  "branch": "main",
+  "commit": "0147c822062e88f5732cf1aae6f3a97bc42e7f44",
+  "name": "Open Relax",
+  "description": "A break-time companion: mix ambient sounds, follow guided breathing exercises, and track your daily relaxation minutes.",
+  "category": "productivity",
+  "tags": [
+    "relaxation",
+    "sound",
+    "breathing",
+    "wellness"
+  ],
+  "icon": "icon.png",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.0.0"
+}
