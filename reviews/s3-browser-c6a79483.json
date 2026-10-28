@@ -1,0 +1,20 @@
+[
+  {
+    "commit": "e081c283635959beb7399b31412b411c413b12f3",
+    "at": "2026-10-28T08:31:13Z",
+    "whats_new": "First release: A full S3 client in a view: browse buckets, navigate folders, preview objects, upload/download/rename/delete, manage tags, versions, and bucket policy — public buckets or your own AWS account.",
+    "new_powers": [
+      "Reads or writes files outside the app (in your home folder or elsewhere on this computer)",
+      "Sends or loads data from fonts.googleapis.com",
+      "Sends or loads data from fonts.gstatic.com",
+      "Changes the tools Claude can use in this app",
+      "Changes how the app runs in the background",
+      "Sends or loads data from acs.amazonaws.com"
+    ],
+    "credits": [],
+    "pr": 28,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1436803879
+  }
+]
