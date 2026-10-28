@@ -1,5 +1,18 @@
 [
   {
+    "commit": "ae65dfc0018516fe4e5fa6acd9c66c5d2351ab4d",
+    "at": "2026-10-28T13:03:32Z",
+    "whats_new": "Merge pull request #1 from kashuk/fused-fused-mp3-player-manager-20261028-1254-2fe9; Record a 30 minute clip of live streams instead of rejecting them; Download without the player and show the audio player when ready; reject live streams; Add audio player to YouTube card once the MP3 is available.",
+    "new_powers": [],
+    "credits": [
+      "kashuk"
+    ],
+    "pr": 34,
+    "first": false,
+    "claude": "skipped",
+    "repo_id": 1435796331
+  },
+  {
     "commit": "7758518e52189558038a621082a38cbd8fce8bd9",
     "at": "2026-10-27T13:57:33Z",
     "whats_new": "First release: Grabs songs from YouTube, converts them to MP3 with cover art, and copies them onto your MP3 player.",
