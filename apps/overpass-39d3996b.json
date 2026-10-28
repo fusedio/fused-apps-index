@@ -1,0 +1,18 @@
+{
+  "slug": "overpass-39d3996b",
+  "repo": "amanbagrecha/overpass",
+  "branch": "main",
+  "commit": "faa43d126e437a338953fc007a34ec5404c9ae13",
+  "name": "Overpass",
+  "description": "track earth observation satellites",
+  "category": "productivity",
+  "tags": [
+    "satellite",
+    "maps",
+    "tracking"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
