@@ -1,0 +1,18 @@
+{
+  "slug": "invoice-generator-54e717c7",
+  "repo": "amanbagrecha/invoice-generator",
+  "branch": "main",
+  "commit": "47df31d7bde1967258eb071d292d2d10b5ca1e47",
+  "name": "Invoice Generator",
+  "description": "Local invoice manager: clients, numbered invoice documents, PDF/image attachments printed as extra pages, FX reference rates. Pure-stdlib backend, data as plain JSON on your disk.",
+  "category": "productivity",
+  "tags": [
+    "documents",
+    "business",
+    "invoices"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.1.1"
+}
