@@ -1,0 +1,18 @@
+[
+  {
+    "commit": "47df31d7bde1967258eb071d292d2d10b5ca1e47",
+    "at": "2026-10-28T08:53:53Z",
+    "whats_new": "First release: Local invoice manager: clients, numbered invoice documents, PDF/image attachments printed as extra pages, FX reference rates. Pure-stdlib backend, data as plain JSON on your disk.",
+    "new_powers": [
+      "Sends or loads data from cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build",
+      "Reads or writes files outside the app (in your home folder or elsewhere on this computer)",
+      "Sends or loads data from api.frankfurter.dev",
+      "Changes the tools Claude can use in this app"
+    ],
+    "credits": [],
+    "pr": 30,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1436823293
+  }
+]
