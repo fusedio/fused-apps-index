@@ -1,0 +1,16 @@
+[
+  {
+    "commit": "79e0416fd02e3d079d32e347bb9dac2d81d4b299",
+    "at": "2026-10-28T08:31:26Z",
+    "whats_new": "First release: Keep your Mac from sleeping, forever or for a set time, with a one-click ticket-style control and a log of recent sessions. An Amphetamine-style caffeinate wrapper.",
+    "new_powers": [
+      "Sends or loads data from fonts.googleapis.com",
+      "Changes how the app runs in the background"
+    ],
+    "credits": [],
+    "pr": 27,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1436748064
+  }
+]
