@@ -1,0 +1,19 @@
+{
+  "slug": "poster-lab-0b14d618",
+  "repo": "AkshilVT/poster-lab",
+  "branch": "main",
+  "commit": "d13ec91cda0fff58aa642d170288fa38615a1971",
+  "name": "Poster Lab",
+  "description": "give inspiration and your images, it will make the image similar to inspiration",
+  "category": "starters",
+  "tags": [
+    "social-media",
+    "image",
+    "pintrest",
+    "instagram"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
