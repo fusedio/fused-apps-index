@@ -1,5 +1,18 @@
 [
   {
+    "commit": "3966a6d8e8a581520ba14269b19444ffac417333",
+    "at": "2026-10-28T13:34:28Z",
+    "whats_new": "Merge pull request #3 from kashuk/fused-fused-mp3-player-manager-20261028-1321-aafb; Replace theme dropdown with circle swatch picker; Bring in vasu2001's latest; Add four-way theme picker (pink/blue, light/dark).",
+    "new_powers": [],
+    "credits": [
+      "kashuk"
+    ],
+    "pr": 38,
+    "first": false,
+    "claude": "skipped",
+    "repo_id": 1435796331
+  },
+  {
     "commit": "67cd2227f646a756ef87d17b960b3ff666f75bd8",
     "at": "2026-10-28T13:14:57Z",
     "whats_new": "Merge pull request #2 from kashuk/fused-fused-mp3-player-manager-20261028-1309-0762; Prefill the YouTube link field with a default video.",
