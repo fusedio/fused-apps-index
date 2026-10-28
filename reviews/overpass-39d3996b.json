@@ -1,0 +1,26 @@
+[
+  {
+    "commit": "faa43d126e437a338953fc007a34ec5404c9ae13",
+    "at": "2026-10-28T10:24:03Z",
+    "whats_new": "First release: track earth observation satellites.",
+    "new_powers": [
+      "Sends or loads data from nominatim.openstreetmap.org",
+      "Sends or loads data from server.arcgisonline.com",
+      "Sends or loads data from fonts.googleapis.com",
+      "Sends or loads data from unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.css",
+      "Sends or loads data from unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js",
+      "Sends or loads data from cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
+      "Sends or loads data from unpkg.com/h3-js@4.1.0/dist/h3-js.umd.js",
+      "Sends or loads data from cdn.jsdelivr.net/npm/satellite.js@5.0.0/dist/satellite.min.js",
+      "Installs packages: httpx, numpy, sgp4",
+      "Sends or loads data from celestrak.org",
+      "Sends or loads data from pypi.org",
+      "Sends or loads data from files.pythonhosted.org"
+    ],
+    "credits": [],
+    "pr": 31,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1436878661
+  }
+]
