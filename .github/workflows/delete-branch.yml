@@ -24,4 +24,12 @@ jobs:
       - env:
           GH_TOKEN: ${{ github.token }}
           REF: ${{ github.event.pull_request.head.ref }}
-        run: gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/${REF}"
+        # setup_ruleset.sh also turns on delete_branch_on_merge, so GitHub
+        # usually removes the branch first: a missing ref is not a failure.
+        run: |
+          if ! out=$(gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/${REF}" 2>&1); then
+            case "$out" in
+              *"Reference does not exist"*) echo "branch already deleted" ;;
+              *) echo "$out" >&2; exit 1 ;;
+            esac
+          fi
