@@ -1,0 +1,19 @@
+{
+  "slug": "open-awake-04f3a50f",
+  "repo": "amanbagrecha/open-awake",
+  "branch": "main",
+  "commit": "79e0416fd02e3d079d32e347bb9dac2d81d4b299",
+  "name": "Open Awake",
+  "description": "Keep your Mac from sleeping, forever or for a set time, with a one-click ticket-style control and a log of recent sessions. An Amphetamine-style caffeinate wrapper.",
+  "category": "productivity",
+  "tags": [
+    "caffeinate",
+    "sleep",
+    "macos",
+    "utility"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.0.1"
+}
