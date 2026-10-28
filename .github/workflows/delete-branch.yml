@@ -1,0 +1,27 @@
+# Delete the head branch of a pull request once it is merged. Separate file
+# on purpose: see the note at the top of review.yml (no `pull_request` event
+# in that file). Same-repo branches only: a fork's branch is not ours to
+# delete. Nothing is checked out or run from the pull request.
+name: delete-branch
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions: {}
+
+jobs:
+  delete-branch:
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref != github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write   # delete the ref
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ github.event.pull_request.head.ref }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/${REF}"
