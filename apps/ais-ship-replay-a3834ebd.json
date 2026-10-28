@@ -1,0 +1,17 @@
+{
+  "slug": "ais-ship-replay-a3834ebd",
+  "repo": "amanbagrecha/ais-ship-replay",
+  "branch": "main",
+  "commit": "b9563f4595feac8c729546383c80a4571caf395b",
+  "name": "Ship Replay 3D",
+  "description": "Visualise AIS Ship data in 3D",
+  "category": "productivity",
+  "tags": [
+    "ships",
+    "maps"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
