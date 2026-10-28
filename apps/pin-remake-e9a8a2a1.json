@@ -1,0 +1,20 @@
+{
+  "slug": "pin-remake-e9a8a2a1",
+  "repo": "AkshilVT/pin-remake",
+  "branch": "main",
+  "commit": "06ab801a8e1620d13b7c4b8df152cc1486255ce1",
+  "name": "Pin Remake",
+  "description": "give inspiration image, and it makes it using your own images recreates layers effects etc",
+  "category": "starters",
+  "tags": [
+    "social-media",
+    "pintrest",
+    "instagram",
+    "photo-edit",
+    "photoshop"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
