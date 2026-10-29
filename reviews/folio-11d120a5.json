@@ -1,0 +1,18 @@
+[
+  {
+    "commit": "ef1ed9ad57a03a862682540a58d7c7d5d8ce75dc",
+    "at": "2026-10-29T05:21:52Z",
+    "whats_new": "First release: Search, sort and clean up the files in any folder by meaning with a local embedding model. Text, images, video and audio. Nothing is uploaded.",
+    "new_powers": [
+      "Reads or writes files outside the app (in your home folder or elsewhere on this computer)",
+      "Installs packages: av, numpy, pillow, pypdf",
+      "Sends or loads data from pypi.org",
+      "Sends or loads data from files.pythonhosted.org"
+    ],
+    "credits": [],
+    "pr": 41,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1437978984
+  }
+]
