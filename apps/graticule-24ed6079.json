@@ -1,0 +1,18 @@
+{
+  "slug": "graticule-24ed6079",
+  "repo": "amanbagrecha/graticule",
+  "branch": "main",
+  "commit": "7b143f3fb35026d285d41ec8a259f5c7bcd74e05",
+  "name": "Graticule",
+  "description": "understand map projection through interactive visuals",
+  "category": "geospatial",
+  "tags": [
+    "learn",
+    "maps",
+    "projection"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.0.0"
+}
