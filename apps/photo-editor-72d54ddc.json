@@ -1,0 +1,20 @@
+{
+  "slug": "photo-editor-72d54ddc",
+  "repo": "amanbagrecha/photo-editor",
+  "branch": "main",
+  "commit": "a5c1d34aed03dab9f167f2e13a951278c305a17e",
+  "name": "Photo Editor",
+  "description": "A local, Canva-style photo editor: layers, print-ready page setup and export, plus on-device AI edit, smart select, upscale and background removal on Apple MLX.",
+  "category": "local-ai",
+  "tags": [
+    "photos",
+    "image-editing",
+    "flux",
+    "mlx",
+    "print"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.0.0"
+}
