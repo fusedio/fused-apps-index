@@ -1,0 +1,20 @@
+{
+  "slug": "folio-11d120a5",
+  "repo": "amanbagrecha/folio",
+  "branch": "main",
+  "commit": "ef1ed9ad57a03a862682540a58d7c7d5d8ce75dc",
+  "name": "Folio",
+  "description": "Search, sort and clean up the files in any folder by meaning with a local embedding model. Text, images, video and audio. Nothing is uploaded.",
+  "category": "local-ai",
+  "tags": [
+    "local-ai",
+    "search",
+    "embeddings",
+    "files",
+    "duplicates"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.0.0"
+}
