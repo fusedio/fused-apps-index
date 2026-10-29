@@ -1,0 +1,20 @@
+{
+  "slug": "vps-manager-463e589a",
+  "repo": "amanbagrecha/vps-manager",
+  "branch": "main",
+  "commit": "2ecbdae22070bdb3623c4fbe09e35f00fa02722e",
+  "name": "VPS Manager",
+  "description": "Manage every SSH host you can reach — auto-discovered from your ~/.ssh config — with a file browser, preview pane, and interactive terminal.",
+  "category": "productivity",
+  "tags": [
+    "ssh",
+    "vps",
+    "terminal",
+    "files",
+    "system"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "1.0.1"
+}
