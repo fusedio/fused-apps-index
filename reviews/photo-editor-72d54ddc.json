@@ -1,0 +1,27 @@
+[
+  {
+    "commit": "a5c1d34aed03dab9f167f2e13a951278c305a17e",
+    "at": "2026-10-29T01:57:14Z",
+    "whats_new": "First release: A local, Canva-style photo editor: layers, print-ready page setup and export, plus on-device AI edit, smart select, upscale and background removal on Apple MLX.",
+    "new_powers": [
+      "Installs packages: numpy, pillow, pyobjc-framework-Cocoa, pyobjc-framework-Quartz, pyobjc-framework-Vision",
+      "Sends or loads data from pypi.org",
+      "Sends or loads data from files.pythonhosted.org",
+      "Sends or loads data from 4.13.0.92",
+      "Installs packages: huggingface-hub, mlx, numpy, opencv-python-headless, pillow, safetensors",
+      "Sends or loads data from 4.14.0.94",
+      "Installs packages: huggingface-hub, mlx-gen, numpy, pillow",
+      "Changes the tools Claude can use in this app",
+      "Reads or writes files outside the app (in your home folder or elsewhere on this computer)",
+      "Sends or loads data from fonts.google.com",
+      "Sends or loads data from fonts.googleapis.com",
+      "Sends or loads data from unpkg.com/konva@9.3.22/konva.min.js",
+      "Changes how the app runs in the background"
+    ],
+    "credits": [],
+    "pr": 40,
+    "first": true,
+    "claude": "skipped",
+    "repo_id": 1437290077
+  }
+]
