@@ -1,5 +1,16 @@
 [
   {
+    "commit": "c4128c096f86f58148035ef8228fc54ff51d482b",
+    "at": "2026-10-31T12:46:26Z",
+    "whats_new": "Claude: <pane-shot> The user attached a picture to this message, del…; Claude: <pane-shot> The user attached a picture to this message, del…; Claude: yes add that please.",
+    "new_powers": [],
+    "credits": [],
+    "pr": 46,
+    "first": false,
+    "claude": "skipped",
+    "repo_id": 1436748064
+  },
+  {
     "commit": "79e0416fd02e3d079d32e347bb9dac2d81d4b299",
     "at": "2026-10-28T08:31:26Z",
     "whats_new": "First release: Keep your Mac from sleeping, forever or for a set time, with a one-click ticket-style control and a log of recent sessions. An Amphetamine-style caffeinate wrapper.",
