@@ -1,0 +1,14 @@
+{
+  "slug": "meeting-notes-77a2a41b",
+  "repo": "iamsdas/meeting-notes",
+  "branch": "master",
+  "commit": "5637c053b63312cfb6648b756be1012899de6d7e",
+  "name": "Meeting notes",
+  "description": "Local AI meeting note taker",
+  "category": "productivity",
+  "tags": [],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
