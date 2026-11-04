@@ -1,0 +1,14 @@
+{
+  "slug": "disk-cleaner-f247adb0",
+  "repo": "iamsdas/disk-cleaner",
+  "branch": "main",
+  "commit": "0b545188b1d5766d1a4e9b20635145b327b685f0",
+  "name": "Disk Cleaner",
+  "description": "Find and recover space",
+  "category": "productivity",
+  "tags": [],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
