@@ -1,5 +1,16 @@
 [
   {
+    "commit": "c5767033a20d87673a2df052291cfbe2352cf526",
+    "at": "2026-11-05T18:24:00Z",
+    "whats_new": "Wrap recorder controls below the status text on narrow screens; Use drawer sidebar in phone landscape; add viewport meta.",
+    "new_powers": [],
+    "credits": [],
+    "pr": 51,
+    "first": false,
+    "claude": "skipped",
+    "repo_id": 1442917289
+  },
+  {
     "commit": "8623e59ef263468d97e6630f5951db21f7996616",
     "at": "2026-11-03T17:29:24Z",
     "whats_new": "Merge pull request #1 from iamsdas/fused-meeting-notes-20261102-1516-6d72; Document macOS recording; Record on macOS with fused.capture; Add macOS capture backend to recorder.",
