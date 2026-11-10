@@ -1,5 +1,16 @@
 [
   {
+    "commit": "b583ae67a2ed2f4536202edeed62cbcdcc129d1d",
+    "at": "2026-11-10T10:45:26Z",
+    "whats_new": "Mention to-do notes in the README; Fix notes thread review findings: rollback, carry-follow, incremental drawer render; Claude: You are the background sync agent for the \"Meeting Notebook\"…; Open a notes thread for each to-do: updates, drafts, links; Add notes.py: a private notes thread inside each to-do; Add compact layout for short panes: date picker and to-dos only.",
+    "new_powers": [],
+    "credits": [],
+    "pr": 52,
+    "first": false,
+    "claude": "skipped",
+    "repo_id": 1434202335
+  },
+  {
     "commit": "a22b5e564ef163310710714ae08cec8216904b5a",
     "at": "2026-10-27T12:20:41Z",
     "whats_new": "First release: Meeting notes app as notebook.",
