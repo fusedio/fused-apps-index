@@ -1,0 +1,16 @@
+{
+  "slug": "dynamical-weather-viewer-547875c5",
+  "repo": "kashuk/dynamical-weather-viewer",
+  "branch": "main",
+  "commit": "b3e956ca64ec50ae94f2d58cf497de645bb9cf00",
+  "name": "Weather layers",
+  "description": "An exploded 3D stack of weather fields from the latest NOAA GFS run, read straight from dynamical.org: a white relief globe sits in the middle of six glass slices (precipitation, sea-level pressure, cloud cover, precipitable water, 10 m wind, 2 m temperature). Each slice shows the hemisphere facing it, so the slices line up with the globe behind them.",
+  "category": "geospatial",
+  "tags": [
+    "weather"
+  ],
+  "icon": "icon.svg",
+  "preview": "preview.png",
+  "remix_of": null,
+  "version": "0.1.0"
+}
