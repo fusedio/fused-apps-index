@@ -1,5 +1,18 @@
 [
   {
+    "commit": "d8eb83ee7ea18875a1b9fdb77dd9d504b4bd0e76",
+    "at": "2026-11-24T12:26:25Z",
+    "whats_new": "Add Worktrees tab to review and remove git worktrees; Add worktree discovery and a background removal job; Size folders with du and let Overview drill into folders; List caches instantly and size each location progressively; Add merge, trash and reveal actions to the Duplicates tab; Add dupe_action.py: merge, trash (with Put Back), reveal.",
+    "new_powers": [
+      "Reads or writes files outside the app (in your home folder or elsewhere on this computer)"
+    ],
+    "credits": [],
+    "pr": 55,
+    "first": false,
+    "claude": "skipped",
+    "repo_id": 1445918101
+  },
+  {
     "commit": "0b545188b1d5766d1a4e9b20635145b327b685f0",
     "at": "2026-11-04T18:06:41Z",
     "whats_new": "First release: Find and recover space.",
